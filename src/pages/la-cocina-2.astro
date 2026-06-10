@@ -269,19 +269,11 @@
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
 
-    const email = emailInput.value;
-
     try {
-      const response = await fetch('https://connect.mailerlite.com/api/subscribers', {
+      const response = await fetch('/.netlify/functions/subscribe', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiI0IiwianRpIjoiNmQzMTYxNzc3NWRhNDVlNGQwZjk4NmFmMmNkODcyZjIwYjExZGY2OTA3OTFjMmEwOWRiZDkwMDBlMmNkYmEwMDM5ZTRkOGRlYzAwMTczMjMiLCJpYXQiOjE3ODAzOTYxOTUuMjgyOTY4LCJuYmYiOjE3ODAzOTYxOTUuMjgyOTcyLCJleHAiOjQ5MzYwNjk3OTUuMjc3Nzc1LCJzdWIiOiIyNDE4MTM4Iiwic2NvcGVzIjpbXX0.waOkrVQJ61JsiGZK_romN6hAfPX-nRuDFbhbW6zKsD7dhsRLWpAgYHi96DJC9hyttNVrzZwyV1i0G88l6uLPIITZR7V1-LN2d1ik70PthfEj466lbvw46V_q5HmVMf6kU8f60QtFXDox0uImlut_VkhWbK2jHYVfs2JmX9rdTkjCvcq5u8gLcePjJOTMZ2CHX4SWafBZik3EyuMG6S8IY8zgulmWmvrME6LQYql4896HqZT1eS1Nf7eR0WFU25-Sby1nbR369b9Xf2Z8d2QRjtj3U8RSKgRTHieXi3lEMJ9_4MTC1jSbXhQY6b0hx_PucLpiWpRRHh9V-2KpzKG7vOcKrS_Mepp2BXrm0CUXP3cibMM1bSkAknPXrDHTTT3WGQI6SoSrx5FZNCnq1tJt8IiqzX73JIUHbO46zzhsp3ViF0SXfjx7t6QF4ocHW4M-s0cCBEbgX3l9qRcIhzpdtovoOi49ACB0Nzqtj3Q4-h-1zwC1xxaSAJNnL8nJKHONHUUFzD26wJNhNXhgTWXXOW_t97lU1LEPzT93UlWttcGNmPXUTQhlb1471JcLob1OrvBApWqUpg_SP8T1iBO8n2Q3-zKTaE6nxaAJRilEVTv7djfSnNnWkOkOfpfolu_-alYUmvWURp7we7d7ZE8E3b0OvpnlCU2lYFTh7F-fT0k'
-        },
-        body: JSON.stringify({
-          email: email,
-          groups: ['189158650754893027']
-        })
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: emailInput.value })
       });
 
       if (response.ok) {
