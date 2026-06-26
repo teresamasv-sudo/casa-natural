@@ -2,40 +2,50 @@
 // en MailerLite. La clave vive en una variable de entorno (MAILERLITE_API_KEY),
 // nunca en el código.
 
-exports.handler = async (event) => {
+export async function handler(event) {
   if (event.httpMethod !== "POST") {
-    return { statusCode: 405, body: "Método no permitido" };
+    return { statusCode: 405, body: "Method Not Allowed" };
   }
 
-  let email;
-  try {
-    email = JSON.parse(event.body || "{}").email;
-  } catch {
-    return { statusCode: 400, body: "Petición no válida" };
-  }
+  const { email } = JSON.parse(event.body);
 
-  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-    return { statusCode: 400, body: "Email no válido" };
+  if (!email) {
+    return { statusCode: 400, body: JSON.stringify({ error: "Email requerido" }) };
   }
 
   try {
-    const res = await fetch("https://connect.mailerlite.com/api/subscribers", {
+    const response = await fetch("https://api.brevo.com/v3/contacts", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${process.env.MAILERLITE_API_KEY}`,
+        "api-key": process.env.BREVO_API_KEY,
       },
       body: JSON.stringify({
-        email,
-        groups: ["189158650754893027"], // grupo "lista de espera masa madre"
+        email: email,
+        listIds: [3],
+        updateEnabled: true,
       }),
     });
 
-    if (res.ok) {
-      return { statusCode: 200, body: JSON.stringify({ ok: true }) };
+    if (response.ok || response.status === 204) {
+      return {
+        statusCode: 200,
+        body: JSON.stringify({ success: true }),
+      };
     }
-    return { statusCode: 502, body: "MailerLite ha devuelto un error" };
-  } catch {
-    return { statusCode: 502, body: "Error de conexión con MailerLite" };
+
+    const error = await response.json();
+    console.error("Error Brevo:", error);
+    return {
+      statusCode: 500,
+      body: JSON.stringify({ error: "Error al suscribir" }),
+    };
+
+  } catch (err) {
+    console.error("Error:", err);
+    return {
+      statusCode: 500,
+      body: JSON.stringify({ error: "Error interno" }),
+    };
   }
-};
+}
