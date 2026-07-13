@@ -1,17 +1,30 @@
-// Función de Netlify: recibe el email del formulario y lo da de alta
-// en MailerLite. La clave vive en una variable de entorno (MAILERLITE_API_KEY),
-// nunca en el código.
+// Función de Netlify: recibe el email del formulario y lo da de alta en Brevo.
+// La clave vive en una variable de entorno (BREVO_API_KEY), nunca en el código.
+//
+// Acepta un campo opcional "source" que decide a qué lista de Brevo va el
+// contacto. Así cada lead magnet puede tener su propia automatización.
+
+// Mapa de origen → lista de Brevo.
+// ⚠️ Cambia el 3 de "menu-semanal" por el ID de la lista nueva
+//    cuando la crees en Brevo (Contactos → Listas).
+const LISTAS = {
+  "default": [3],          // lista general (cartas de Casa Natural)
+  "menu-semanal": [3],     // ← poner aquí el ID de la lista del menú semanal
+};
 
 export async function handler(event) {
   if (event.httpMethod !== "POST") {
     return { statusCode: 405, body: "Method Not Allowed" };
   }
 
-  const { email } = JSON.parse(event.body);
+  const { email, source } = JSON.parse(event.body);
 
   if (!email) {
     return { statusCode: 400, body: JSON.stringify({ error: "Email requerido" }) };
   }
+
+  // Solo se aceptan orígenes conocidos; cualquier otra cosa va a la lista general.
+  const listIds = LISTAS[source] || LISTAS["default"];
 
   try {
     const response = await fetch("https://api.brevo.com/v3/contacts", {
@@ -22,8 +35,9 @@ export async function handler(event) {
       },
       body: JSON.stringify({
         email: email,
-        listIds: [3],
+        listIds: listIds,
         updateEnabled: true,
+        attributes: source ? { ORIGEN: source } : undefined,
       }),
     });
 

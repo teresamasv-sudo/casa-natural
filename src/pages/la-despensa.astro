@@ -1,0 +1,222 @@
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>LA DESPENSA · Casa Natural</title>
+    <meta name="description" content="Los recursos de Casa Natural: plantillas, guías y cosas útiles para casas donde todavía se cocina. Empieza por el menú semanal." />
+
+    <meta property="og:title" content="LA DESPENSA · Casa Natural" />
+    <meta property="og:description" content="El menú semanal de una casa grande: mi sistema para planificar comidas y cenas para 10, gratis en tu correo." />
+    <meta property="og:image" content="https://casanatural.studio/despensa.webp" />
+    <meta property="og:url" content="https://casanatural.studio/la-despensa" />
+    <meta property="og:type" content="website" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Courier+Prime&display=swap" rel="stylesheet">
+
+    <style is:global>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      body { overflow-x: hidden; background: #F5F1EA; }
+
+      .despensa-form {
+        display: flex;
+        gap: 12px;
+        justify-content: center;
+        flex-wrap: wrap;
+        margin-top: 34px;
+      }
+      .despensa-form input {
+        font-family: 'Courier Prime', 'Courier New', monospace;
+        font-size: 0.9rem;
+        padding: 16px 20px;
+        border: 1px solid rgba(60,50,40,0.3);
+        background: rgba(255,255,255,0.6);
+        color: #2E2A27;
+        min-width: 260px;
+        outline: none;
+      }
+      .despensa-form input::placeholder { color: #8a7f73; }
+      .despensa-form button {
+        font-family: 'Courier Prime', 'Courier New', monospace;
+        text-transform: uppercase;
+        letter-spacing: 0.16em;
+        font-size: 0.72rem;
+        padding: 16px 30px;
+        border: 1px solid rgba(60,50,40,0.4);
+        background: #2E2A27;
+        color: #F5F1EA;
+        cursor: pointer;
+        transition: 0.3s ease;
+      }
+      .despensa-form button:hover {
+        background: #45403a;
+        transform: translateY(-1px);
+      }
+      .success-message {
+        font-family: 'Courier Prime', 'Courier New', monospace;
+        color: #5E534B;
+        font-size: 0.95rem;
+        line-height: 1.8;
+        margin-top: 34px;
+      }
+    </style>
+  </head>
+
+  <body>
+
+    <!-- CABECERA -->
+    <section style="
+      background: url('/textura.webp'), #F5F1EA;
+      background-size: 700px;
+      background-repeat: repeat;
+      padding: 110px 30px 70px 30px;
+      text-align: center;
+    ">
+      <a href="/" style="
+        font-family: 'Courier New', monospace;
+        font-size: 0.68rem;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        color: #5A4E45;
+        text-decoration: none;
+      ">← Casa Natural</a>
+
+      <div style="
+        font-family: 'Courier New', monospace; text-transform: uppercase;
+        letter-spacing: 0.18em; font-size: 0.82rem; color: #5A4E45;
+        margin: 60px 0 18px 0; font-weight: 600;
+      ">LA DESPENSA</div>
+
+      <h1 style="
+        font-family: 'Cormorant Garamond', Georgia, serif;
+        font-weight: 400;
+        color: #2E2A27;
+        font-size: clamp(2.4rem, 5vw, 4rem);
+        line-height: 1.15;
+        max-width: 720px;
+        margin: 0 auto 26px auto;
+      ">Las cosas útiles de la casa,<br />en sus tarros.</h1>
+
+      <p style="
+        font-family: 'Courier New', monospace; color: #5E534B;
+        font-size: 1rem; line-height: 1.8; max-width: 620px;
+        margin: auto; opacity: 0.9;
+      ">Plantillas, guías y sistemas que usamos aquí cada semana.
+      Algunos se regalan, otros — pronto — estarán a la venta.</p>
+
+      <div style="max-width: 560px; margin: 60px auto 0 auto;">
+        <img src="/despensa-full.webp" alt="Despensa antigua con estantes de tarros de conservas, ristra de ajos, embutidos colgando y un botijo sobre la mesa" style="width: 100%; display: block;" />
+      </div>
+    </section>
+
+    <!-- PRODUCTO 1: MENÚ SEMANAL -->
+    <section id="menu-semanal" style="background: #EFE7DC; padding: 90px 30px;">
+      <div style="max-width: 720px; margin: auto; text-align: center;">
+
+        <div style="
+          font-family: 'Courier New', monospace; text-transform: uppercase;
+          letter-spacing: 0.18em; font-size: 0.78rem; color: #5A4E45;
+          margin-bottom: 18px; font-weight: 600;
+        ">GRATIS DURANTE EL LANZAMIENTO · EN TU CORREO</div>
+
+        <p style="
+          font-family: 'Cormorant Garamond', Georgia, serif; color: #2E2A27;
+          font-size: clamp(1.6rem, 2.4vw, 2.4rem); line-height: 1.4; margin-bottom: 26px;
+        ">El menú semanal de una casa grande</p>
+
+        <p style="
+          font-family: 'Courier New', monospace; color: #5E534B;
+          font-size: 1rem; line-height: 1.8; max-width: 640px;
+          margin: auto; opacity: 0.9;
+        ">Cada domingo planifico comidas y cenas para 10 personas en menos de
+        20 minutos. Esta guía en PDF cuenta cómo: el sistema en 4 pasos,
+        una semana real de ejemplo y la plantilla para tu casa.</p>
+
+        <form class="despensa-form" id="despensa-form">
+          <input
+            type="email"
+            id="despensa-email"
+            placeholder="tu correo"
+            required
+          />
+          <button type="submit">Quiero la guía</button>
+        </form>
+
+        <p class="success-message" id="despensa-success" style="display: none;">
+          Ya va de camino a tu correo.<br /><br />
+          Y mientras llega, aquí tienes
+          <a href="/plantilla.html" style="color: #b85c38;">tu plantilla para usar cada domingo</a>.<br /><br />
+          De regalo, te llegan las cartas de Casa Natural — lo que vaya
+          fermentando, creciendo o secándose por aquí.
+        </p>
+
+        <p style="
+          font-family: 'Courier New', monospace; color: #8a7f73;
+          font-size: 0.72rem; letter-spacing: 0.08em; margin-top: 26px;
+        ">Sin spam. Solo cartas de vez en cuando. Te puedes ir cuando quieras.</p>
+      </div>
+    </section>
+
+    <!-- EN EL ESTANTE, PRONTO -->
+    <section style="
+      background: url('/textura.webp'), #F5F1EA;
+      background-size: 700px;
+      background-repeat: repeat;
+      padding: 90px 30px;
+      text-align: center;
+    ">
+      <div style="
+        font-family: 'Courier New', monospace; text-transform: uppercase;
+        letter-spacing: 0.18em; font-size: 0.78rem; color: #5A4E45;
+        margin-bottom: 36px; font-weight: 600;
+      ">EN EL ESTANTE, PRONTO</div>
+
+      <div style="
+        font-family: 'Courier New', monospace; color: #5E534B;
+        font-size: 1rem; line-height: 2.2; max-width: 640px;
+        margin: auto; opacity: 0.9;
+      ">
+        <p>EL SISTEMA COMPLETO · cuatro semanas de menús + listas de la compra</p>
+        <p>LA COCINA · el curso de masa madre desde cero</p>
+      </div>
+
+      <p style="
+        font-family: 'Cormorant Garamond', Georgia, serif; font-style: italic;
+        color: #5E534B; font-size: 1.15rem; margin-top: 46px;
+      ">Si estás en la lista, serás de las primeras en saberlo.</p>
+    </section>
+
+    <img src="/footer-textura.webp" alt="" style="
+      width: 100vw; display: block;
+    " />
+
+    <script>
+      const form = document.getElementById('despensa-form');
+      const emailInput = document.getElementById('despensa-email');
+      const success = document.getElementById('despensa-success');
+
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        try {
+          const response = await fetch('/.netlify/functions/subscribe', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email: emailInput.value, source: 'menu-semanal' })
+          });
+
+          if (response.ok) {
+            form.style.display = 'none';
+            success.style.display = 'block';
+          } else {
+            alert('Algo fue mal. Inténtalo de nuevo.');
+          }
+        } catch (err) {
+          alert('Error de conexión. Inténtalo de nuevo.');
+        }
+      });
+    </script>
+
+  </body>
+</html>
