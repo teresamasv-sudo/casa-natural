@@ -5,11 +5,10 @@
 // contacto. Así cada lead magnet puede tener su propia automatización.
 
 // Mapa de origen → lista de Brevo.
-// ⚠️ Cambia el 3 de "menu-semanal" por el ID de la lista nueva
-//    cuando la crees en Brevo (Contactos → Listas).
+// Cada formulario manda su "source" y aquí se decide a qué lista va.
 const LISTAS = {
   "default": [3],          // lista general (cartas de Casa Natural)
-  "menu-semanal": [3],     // ← poner aquí el ID de la lista del menú semanal
+  "menu-semanal": [6],     // lista de La Despensa (menú semanal)
 };
 
 export async function handler(event) {
