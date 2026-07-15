@@ -161,8 +161,11 @@ async function sendMetaMessage({ recipientId, text, accessToken, mode = 'dm' }) 
   let body;
 
   if (mode === 'private_reply') {
-    endpoint = `https://graph.instagram.com/v22.0/${recipientId}/replies`;
-    body = JSON.stringify({ message: text });
+    endpoint = 'https://graph.instagram.com/v22.0/me/messages';
+    body = JSON.stringify({
+      recipient: { comment_id: recipientId },
+      message: { text },
+    });
     console.info('Instagram private reply', { recipientId });
   } else {
     endpoint = 'https://graph.instagram.com/v22.0/me/messages';
@@ -278,6 +281,7 @@ async function processCommentWebhook(payload, context = {}) {
   const commentId = commentEvent.id;
   const existingInteraction = await findInteractionByCommentId(commentId);
   if (existingInteraction) {
+    console.info('Instagram comment duplicate ignored', { commentId });
     return existingInteraction;
   }
 
@@ -303,9 +307,16 @@ async function processCommentWebhook(payload, context = {}) {
     updatedAt: new Date().toISOString(),
   };
 
-  await createInteractionDb(interaction);
+  try {
+    await createInteractionDb(interaction);
+  } catch (error) {
+    if (error?.code === '23505' || error?.message?.includes('duplicate') || error?.message?.includes('unique')) {
+      console.info('Instagram comment duplicate ignored', { commentId });
+      return { id: commentId, duplicate: true };
+    }
+    throw error;
+  }
 
-  const recipientId = interaction.instagramUserId;
   const starterMessage = buildMessageText(campaign.starterMessage, { resource_url: campaign.resourceUrl });
 
   try {
