@@ -143,7 +143,7 @@ function createFollowerVerificationProvider() {
   };
 }
 
-async function sendMetaMessage({ recipientId, text, accessToken, pageId }) {
+async function sendMetaMessage({ recipientId, text, accessToken }) {
   if (!accessToken) {
     throw new Error('META_ACCESS_TOKEN is not configured');
   }
@@ -152,21 +152,26 @@ async function sendMetaMessage({ recipientId, text, accessToken, pageId }) {
     throw new Error('Recipient ID is required');
   }
 
-  const endpoint = `https://graph.facebook.com/v22.0/${pageId || 'me'}/messages`;
+  const endpoint = 'https://graph.instagram.com/v22.0/me/messages';
   const response = await fetch(endpoint, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+      'Content-Type': 'application/json',
+    },
     body: JSON.stringify({
-      recipient: { id: recipientId },
-      messaging_type: 'RESPONSE',
+      recipient_id: recipientId,
       message: { text },
-      access_token: accessToken,
     }),
   });
 
   const payload = await response.json().catch(() => ({}));
   if (!response.ok) {
-    throw new Error(payload.error?.message || 'Meta message delivery failed');
+    console.error('Instagram message delivery failed', {
+      status: response.status,
+      error: payload.error || payload,
+    });
+    throw new Error(payload.error?.message || 'Instagram message delivery failed');
   }
 
   return payload;
