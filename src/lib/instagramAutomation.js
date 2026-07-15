@@ -143,7 +143,7 @@ function createFollowerVerificationProvider() {
   };
 }
 
-async function sendMetaMessage({ recipientId, text, accessToken }) {
+async function sendMetaMessage({ recipientId, text, accessToken, mode = 'dm' }) {
   if (!accessToken) {
     throw new Error('META_ACCESS_TOKEN is not configured');
   }
@@ -152,22 +152,37 @@ async function sendMetaMessage({ recipientId, text, accessToken }) {
     throw new Error('Recipient ID is required');
   }
 
-  const endpoint = 'https://graph.instagram.com/v22.0/me/messages';
-  const response = await fetch(endpoint, {
-    method: 'POST',
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
+  const headers = {
+    Authorization: `Bearer ${accessToken}`,
+    'Content-Type': 'application/json',
+  };
+
+  let endpoint;
+  let body;
+
+  if (mode === 'private_reply') {
+    endpoint = `https://graph.instagram.com/v22.0/${recipientId}/replies`;
+    body = JSON.stringify({ message: text });
+    console.info('Instagram private reply', { recipientId });
+  } else {
+    endpoint = 'https://graph.instagram.com/v22.0/me/messages';
+    body = JSON.stringify({
       recipient_id: recipientId,
       message: { text },
-    }),
+    });
+    console.info('Instagram DM send', { recipientId });
+  }
+
+  const response = await fetch(endpoint, {
+    method: 'POST',
+    headers,
+    body,
   });
 
   const payload = await response.json().catch(() => ({}));
   if (!response.ok) {
     console.error('Instagram message delivery failed', {
+      mode,
       status: response.status,
       error: payload.error || payload,
     });
@@ -295,10 +310,10 @@ async function processCommentWebhook(payload, context = {}) {
 
   try {
     await sendMetaMessage({
-      recipientId,
+      recipientId: commentId,
       text: starterMessage,
       accessToken: context.accessToken || process.env.META_ACCESS_TOKEN,
-      pageId: context.pageId || process.env.META_PAGE_ID || 'me',
+      mode: 'private_reply',
     });
     interaction.status = 'PRIVATE_REPLY_SENT';
     interaction.privateReplySentAt = new Date().toISOString();
@@ -308,10 +323,10 @@ async function processCommentWebhook(payload, context = {}) {
     if (campaign.requireFollowFlow) {
       const followRequest = buildMessageText(campaign.followRequestMessage, { resource_url: campaign.resourceUrl });
       await sendMetaMessage({
-        recipientId,
+        recipientId: commentId,
         text: followRequest,
         accessToken: context.accessToken || process.env.META_ACCESS_TOKEN,
-        pageId: context.pageId || process.env.META_PAGE_ID || 'me',
+        mode: 'private_reply',
       });
       interaction.status = 'WAITING_FOR_FOLLOW_CONFIRMATION';
       interaction.followStatus = 'UNAVAILABLE';
