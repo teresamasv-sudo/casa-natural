@@ -112,10 +112,6 @@ async function ensureInstagramOAuthTable() {
 
 async function seedDefaultCampaign() {
   const db = getSql();
-  const existing = await db`SELECT id FROM campaigns LIMIT 1`;
-  if (existing.length > 0) {
-    return;
-  }
 
   await db`
     INSERT INTO campaigns (
@@ -135,16 +131,29 @@ async function seedDefaultCampaign() {
       'campaign-limoncello',
       'Limoncello',
       'configured-later',
-      'LIMÓN',
+      'LIMONCELLO',
       '[]'::jsonb,
-      '🍋 La tengo.\n\nPulsa aquí y te mando la receta del limoncello.',
+      '🍋 Te lo mando por aquí. Dame un segundo…',
       'Un momento 🌿 Creo que todavía no estás dentro de Casa Natural.\n\nSígueme y escribe YA ESTÁ 🍋. Te guardo el limoncello 🍋',
       'YA ESTÁ 🍋',
       'Ahora sí 🍋\n\nAquí tienes la receta del limoncello de Casa Natural.\n\n{{resource_url}}\n\nGuárdala, que esto en verano desaparece misteriosamente del congelador.',
       'https://casanatural.com/recetas/limoncello',
       TRUE,
       TRUE
-    );
+    )
+    ON CONFLICT (id) DO UPDATE SET
+      name = EXCLUDED.name,
+      instagram_media_id = EXCLUDED.instagram_media_id,
+      primary_keyword = EXCLUDED.primary_keyword,
+      keyword_aliases = EXCLUDED.keyword_aliases,
+      starter_message = EXCLUDED.starter_message,
+      follow_request_message = EXCLUDED.follow_request_message,
+      confirmation_text = EXCLUDED.confirmation_text,
+      delivery_message = EXCLUDED.delivery_message,
+      resource_url = EXCLUDED.resource_url,
+      require_follow_flow = EXCLUDED.require_follow_flow,
+      active = EXCLUDED.active,
+      updated_at = NOW();
   `;
 }
 
