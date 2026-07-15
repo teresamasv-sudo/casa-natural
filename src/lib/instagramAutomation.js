@@ -170,10 +170,10 @@ async function sendMetaMessage({ recipientId, text, accessToken, mode = 'dm' }) 
   } else {
     endpoint = 'https://graph.instagram.com/v22.0/me/messages';
     body = JSON.stringify({
-      recipient_id: recipientId,
+      recipient: { id: recipientId },
       message: { text },
     });
-    console.info('Instagram DM send', { recipientId });
+    console.info('Instagram DM send');
   }
 
   const response = await fetch(endpoint, {
@@ -244,7 +244,10 @@ async function findInteractionsByUserId(userId) {
 
 async function createWebhookEvent(eventType, payload, processingStatus = 'RECEIVED') {
   await initializeDatabase();
-  const externalEventId = payload?.entry?.[0]?.id || `event-${Date.now()}`;
+  // entry[0].id is the Instagram account ID (identical on every event), so the
+  // idempotency key must come from the payload itself: identical retried
+  // deliveries collapse into one row, distinct events never collide.
+  const externalEventId = `event-${createHash('sha1').update(JSON.stringify(payload || {})).digest('hex')}`;
   const existing = await getWebhookEventByExternalIdDb(externalEventId);
   if (existing) {
     return normalizeWebhookEventRow(existing);
@@ -270,141 +273,237 @@ async function markWebhookEventProcessed(eventId, processingStatus) {
   return normalizeWebhookEventRow(updated);
 }
 
+function extractCommentChanges(payload) {
+  const commentChanges = [];
+  for (const entry of payload?.entry || []) {
+    for (const change of entry.changes || []) {
+      if (change.field === 'comments' && change.value) {
+        commentChanges.push({
+          entryId: entry.id != null ? String(entry.id) : null,
+          value: change.value,
+        });
+      }
+    }
+  }
+  return commentChanges;
+}
+
+// Instagram only accepts a private reply for a top-level comment on our own
+// media, written by someone other than the account itself, that has not been
+// private-replied before. Anything else is rejected with code 100 /
+// subcode 2534025 ("The comment is invalid for a private reply").
+function evaluateCommentEligibility({ entryId, value }) {
+  if (!value.id) {
+    return { eligible: false, reason: 'missing_comment_id' };
+  }
+
+  if (value.parent_id) {
+    return { eligible: false, reason: 'reply_comment' };
+  }
+
+  const fromId = value.from?.id != null ? String(value.from.id) : null;
+  if (fromId && entryId && fromId === entryId) {
+    return { eligible: false, reason: 'own_comment' };
+  }
+
+  return { eligible: true, reason: 'top_level_comment' };
+}
+
 async function processCommentWebhook(payload, context = {}) {
   await initializeDatabase();
+  const commentChanges = extractCommentChanges(payload);
+  if (commentChanges.length === 0) {
+    return null;
+  }
+
   const campaigns = await listCampaigns();
-  const commentEvent = payload?.entry?.[0]?.changes?.find((change) => change.field === 'comments')?.value;
-  if (!commentEvent) {
-    return null;
-  }
+  let lastResult = null;
 
-  const commentId = commentEvent.id;
-  const existingInteraction = await findInteractionByCommentId(commentId);
-  if (existingInteraction) {
-    console.info('Instagram comment duplicate ignored', { commentId });
-    return existingInteraction;
-  }
+  for (const commentChange of commentChanges) {
+    const commentEvent = commentChange.value;
+    const commentId = commentEvent.id || null;
+    const mediaId = commentEvent.media?.id || commentEvent.media_id || null;
+    const eligibility = evaluateCommentEligibility(commentChange);
 
-  const campaign = campaigns.find((item) => item.active && campaignMatchesComment(item, commentEvent.text || ''));
-  if (!campaign) {
-    return null;
-  }
-
-  const interaction = {
-    id: buildId('interaction'),
-    campaignId: campaign.id,
-    instagramCommentId: commentId,
-    instagramMediaId: payload?.entry?.[0]?.changes?.find((change) => change.field === 'comments')?.value?.media_id || campaign.instagramMediaId,
-    instagramUserId: commentEvent.from?.id || null,
-    originalCommentText: commentEvent.text || '',
-    normalizedCommentText: normalizeText(commentEvent.text || ''),
-    status: 'COMMENT_MATCHED',
-    privateReplySentAt: null,
-    userInteractedAt: null,
-    followStatus: 'UNAVAILABLE',
-    resourceDeliveredAt: null,
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-  };
-
-  try {
-    await createInteractionDb(interaction);
-  } catch (error) {
-    if (error?.code === '23505' || error?.message?.includes('duplicate') || error?.message?.includes('unique')) {
-      console.info('Instagram comment duplicate ignored', { commentId });
-      return { id: commentId, duplicate: true };
-    }
-    throw error;
-  }
-
-  const starterMessage = buildMessageText(campaign.starterMessage, { resource_url: campaign.resourceUrl });
-
-  try {
-    await sendMetaMessage({
-      recipientId: commentId,
-      text: starterMessage,
-      accessToken: context.accessToken || process.env.META_ACCESS_TOKEN,
-      mode: 'private_reply',
+    console.info('Instagram comment event', {
+      field: 'comments',
+      commentId,
+      mediaId,
+      parentId: commentEvent.parent_id || null,
+      topLevel: !commentEvent.parent_id,
+      eligible: eligibility.eligible,
+      reason: eligibility.reason,
     });
-    interaction.status = 'PRIVATE_REPLY_SENT';
-    interaction.privateReplySentAt = new Date().toISOString();
-    interaction.updatedAt = new Date().toISOString();
-    await updateInteractionDb(interaction);
 
-    if (campaign.requireFollowFlow) {
-      const followRequest = buildMessageText(campaign.followRequestMessage, { resource_url: campaign.resourceUrl });
+    if (!eligibility.eligible) {
+      continue;
+    }
+
+    const existingInteraction = await findInteractionByCommentId(commentId);
+    if (existingInteraction) {
+      console.info('Instagram comment duplicate ignored', { commentId });
+      lastResult = existingInteraction;
+      continue;
+    }
+
+    const campaign = campaigns.find((item) => item.active && campaignMatchesComment(item, commentEvent.text || ''));
+    if (!campaign) {
+      console.info('Instagram comment did not match any campaign', { commentId });
+      continue;
+    }
+
+    const interaction = {
+      id: buildId('interaction'),
+      campaignId: campaign.id,
+      instagramCommentId: commentId,
+      instagramMediaId: mediaId,
+      instagramUserId: commentEvent.from?.id || null,
+      originalCommentText: commentEvent.text || '',
+      normalizedCommentText: normalizeText(commentEvent.text || ''),
+      status: 'COMMENT_MATCHED',
+      privateReplySentAt: null,
+      userInteractedAt: null,
+      followStatus: 'UNAVAILABLE',
+      resourceDeliveredAt: null,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    };
+
+    // Atomic claim: the UNIQUE constraint on instagram_comment_id makes the
+    // INSERT the deduplication point, before any send is attempted.
+    try {
+      await createInteractionDb(interaction);
+      console.info('Instagram comment claimed', { commentId });
+    } catch (error) {
+      if (error?.code === '23505' || error?.message?.includes('duplicate') || error?.message?.includes('unique')) {
+        console.info('Instagram comment duplicate ignored', { commentId });
+        lastResult = { id: commentId, duplicate: true };
+        continue;
+      }
+      throw error;
+    }
+
+    const starterMessage = buildMessageText(campaign.starterMessage, { resource_url: campaign.resourceUrl });
+
+    // Instagram allows exactly ONE private reply per comment, so only the
+    // starter message goes out here. When the campaign requires the follow
+    // flow, the follow-request is sent later as a DM, once the user has
+    // messaged us and a messaging window exists (see processMessageWebhook).
+    try {
       await sendMetaMessage({
         recipientId: commentId,
-        text: followRequest,
+        text: starterMessage,
         accessToken: context.accessToken || process.env.META_ACCESS_TOKEN,
         mode: 'private_reply',
       });
-      interaction.status = 'WAITING_FOR_FOLLOW_CONFIRMATION';
-      interaction.followStatus = 'UNAVAILABLE';
+      interaction.status = campaign.requireFollowFlow ? 'WAITING_FOR_FOLLOW_CONFIRMATION' : 'PRIVATE_REPLY_SENT';
+      interaction.privateReplySentAt = new Date().toISOString();
       interaction.updatedAt = new Date().toISOString();
       await updateInteractionDb(interaction);
+    } catch (error) {
+      interaction.status = 'FAILED';
+      interaction.updatedAt = new Date().toISOString();
+      await updateInteractionDb(interaction);
+      throw error;
     }
-  } catch (error) {
-    interaction.status = 'FAILED';
-    interaction.updatedAt = new Date().toISOString();
-    await updateInteractionDb(interaction);
-    throw error;
+
+    lastResult = interaction;
   }
 
-  return interaction;
+  return lastResult;
 }
 
 async function processMessageWebhook(payload, context = {}) {
   await initializeDatabase();
-  const messaging = payload?.entry?.[0]?.messaging?.[0];
-  if (!messaging?.message?.text) {
+  const messagingEvents = [];
+  for (const entry of payload?.entry || []) {
+    for (const messaging of entry.messaging || []) {
+      messagingEvents.push(messaging);
+    }
+  }
+
+  if (messagingEvents.length === 0) {
     return null;
   }
 
-  const senderId = messaging.sender?.id;
-  const text = messaging.message.text;
-  const interactions = await listInteractionsDb();
-  const interaction = interactions
-    .slice()
-    .reverse()
-    .find((item) => item.instagramUserId === senderId && item.status === 'WAITING_FOR_FOLLOW_CONFIRMATION');
+  let lastResult = null;
 
-  if (!interaction) {
-    return null;
+  for (const messaging of messagingEvents) {
+    // Echoes are our own outbound messages delivered back to the webhook;
+    // reacting to them would loop the automation against itself.
+    if (!messaging?.message?.text || messaging.message.is_echo) {
+      continue;
+    }
+
+    const senderId = messaging.sender?.id;
+    if (!senderId) {
+      continue;
+    }
+
+    const text = messaging.message.text;
+    const rows = await listInteractionsDb();
+    const interaction = rows
+      .map(normalizeInteractionRow)
+      .filter(Boolean)
+      .reverse()
+      .find((item) => item.instagramUserId === String(senderId) && item.status === 'WAITING_FOR_FOLLOW_CONFIRMATION');
+
+    if (!interaction) {
+      continue;
+    }
+
+    const campaign = normalizeCampaignRow(await getCampaignByIdDb(interaction.campaignId));
+    if (!campaign) {
+      continue;
+    }
+
+    const isConfirmation = normalizeText(text) === normalizeText(campaign.confirmationText);
+
+    if (!isConfirmation) {
+      // First user message opens the messaging window: send the follow-request
+      // exactly once (followStatus guards repeats on later messages).
+      if (interaction.followStatus !== 'REQUESTED' && campaign.followRequestMessage) {
+        const followRequest = buildMessageText(campaign.followRequestMessage, { resource_url: campaign.resourceUrl });
+        await sendMetaMessage({
+          recipientId: senderId,
+          text: followRequest,
+          accessToken: context.accessToken || process.env.META_ACCESS_TOKEN,
+          mode: 'dm',
+        });
+        interaction.followStatus = 'REQUESTED';
+        interaction.userInteractedAt = new Date().toISOString();
+        interaction.updatedAt = new Date().toISOString();
+        await updateInteractionDb(interaction);
+      }
+      lastResult = interaction;
+      continue;
+    }
+
+    try {
+      const deliveryMessage = buildMessageText(campaign.deliveryMessage, { resource_url: campaign.resourceUrl });
+      await sendMetaMessage({
+        recipientId: senderId,
+        text: deliveryMessage,
+        accessToken: context.accessToken || process.env.META_ACCESS_TOKEN,
+        mode: 'dm',
+      });
+
+      interaction.status = 'RESOURCE_DELIVERED';
+      interaction.resourceDeliveredAt = new Date().toISOString();
+      interaction.userInteractedAt = new Date().toISOString();
+      interaction.updatedAt = new Date().toISOString();
+      await updateInteractionDb(interaction);
+    } catch (error) {
+      interaction.status = 'FAILED';
+      interaction.updatedAt = new Date().toISOString();
+      await updateInteractionDb(interaction);
+      throw error;
+    }
+
+    lastResult = interaction;
   }
 
-  const campaign = await getCampaignByIdDb(interaction.campaignId);
-  if (!campaign) {
-    return null;
-  }
-
-  const isConfirmation = normalizeText(text) === normalizeText(campaign.confirmationText);
-  if (!isConfirmation) {
-    return interaction;
-  }
-
-  try {
-    const deliveryMessage = buildMessageText(campaign.deliveryMessage, { resource_url: campaign.resourceUrl });
-    await sendMetaMessage({
-      recipientId: senderId,
-      text: deliveryMessage,
-      accessToken: context.accessToken || process.env.META_ACCESS_TOKEN,
-      pageId: context.pageId || process.env.META_PAGE_ID || 'me',
-    });
-
-    interaction.status = 'RESOURCE_DELIVERED';
-    interaction.resourceDeliveredAt = new Date().toISOString();
-    interaction.userInteractedAt = new Date().toISOString();
-    interaction.updatedAt = new Date().toISOString();
-    await updateInteractionDb(interaction);
-  } catch (error) {
-    interaction.status = 'FAILED';
-    interaction.updatedAt = new Date().toISOString();
-    await updateInteractionDb(interaction);
-    throw error;
-  }
-
-  return interaction;
+  return lastResult;
 }
 
 async function processWebhook(payload, context = {}) {
@@ -412,19 +511,29 @@ async function processWebhook(payload, context = {}) {
   const webhookEvent = await createWebhookEvent(eventType, payload, 'PROCESSING');
 
   try {
+    let status = 'SKIPPED';
+
+    // Instagram Login delivers both comment changes and messaging events
+    // under object "instagram"; the legacy "page" object only ever carried
+    // messaging events.
     if (payload?.object === 'instagram') {
       const commentResult = await processCommentWebhook(payload, context);
       if (commentResult) {
-        await markWebhookEventProcessed(webhookEvent.id, 'COMMENT_MATCHED');
+        status = 'COMMENT_MATCHED';
+      }
+
+      const messageResult = await processMessageWebhook(payload, context);
+      if (messageResult) {
+        status = 'MESSAGE_PROCESSED';
+      }
+    } else if (payload?.object === 'page') {
+      const messageResult = await processMessageWebhook(payload, context);
+      if (messageResult) {
+        status = 'MESSAGE_PROCESSED';
       }
     }
 
-    if (payload?.object === 'page') {
-      const messageResult = await processMessageWebhook(payload, context);
-      if (messageResult) {
-        await markWebhookEventProcessed(webhookEvent.id, 'RESOURCE_DELIVERED');
-      }
-    }
+    await markWebhookEventProcessed(webhookEvent.id, status);
   } catch (error) {
     await markWebhookEventProcessed(webhookEvent.id, 'FAILED');
     throw error;
