@@ -1,0 +1,87 @@
+---
+const title = 'Política de privacidad · Casa Natural';
+const updatedAt = '15 de julio de 2026';
+---
+
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>{title}</title>
+    <meta name="description" content="Política de privacidad del servicio de automatización de Instagram para Casa Natural." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Courier+Prime&display=swap" rel="stylesheet" />
+    <style is:global>
+      * { box-sizing: border-box; margin: 0; padding: 0; }
+      body { background: #f5f1ea; color: #2e2a27; font-family: 'Courier Prime', monospace; line-height: 1.8; }
+      a { color: inherit; }
+      .page { max-width: 860px; margin: 0 auto; padding: 56px 24px 96px; }
+      .eyebrow { font-family: 'Courier Prime', monospace; text-transform: uppercase; letter-spacing: 0.2em; font-size: 0.77rem; color: #5a4e45; margin-bottom: 12px; }
+      h1, h2 { font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 400; line-height: 1.2; }
+      h1 { font-size: clamp(2.2rem, 4vw, 3rem); margin-bottom: 18px; }
+      h2 { font-size: 1.45rem; margin: 28px 0 10px; }
+      p, li { font-size: 1rem; color: #433b35; }
+      ul { padding-left: 1.2rem; margin: 10px 0 0; }
+      .card { background: rgba(255,255,255,0.65); border: 1px solid rgba(60,50,40,0.14); padding: 24px 24px 28px; box-shadow: 0 10px 30px rgba(0,0,0,0.04); }
+      .meta { font-size: 0.92rem; color: #6f6258; margin-bottom: 24px; }
+      .pill { display: inline-block; border: 1px solid rgba(60,50,40,0.2); padding: 8px 12px; margin-top: 18px; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.16em; }
+    </style>
+  </head>
+  <body>
+    <main class="page">
+      <div class="eyebrow">Casa Natural</div>
+      <h1>Política de privacidad</h1>
+      <p class="meta">Última actualización: {updatedAt}</p>
+
+      <div class="card">
+        <p>Esta política describe cómo Casa Natural gestiona los datos que se procesan para el servicio de automatización de respuestas privadas en Instagram, tal como se implementa en este proyecto.</p>
+
+        <h2>1. Responsable del tratamiento</h2>
+        <p>El servicio es operado por Casa Natural. Para contactar con el responsable del tratamiento puedes escribir a <a href="mailto:hola@casanatural.studio">hola@casanatural.studio</a> o visitar la web de Casa Natural: <a href="https://casanatural.studio">https://casanatural.studio</a>.</p>
+
+        <h2>2. Qué finalidad tiene esta automatización</h2>
+        <p>La automatización permite responder a comentarios publicados en Instagram con mensajes privados, enviar recursos o información cuando un usuario participa en una campaña concreta y registrar el estado de esa interacción. El objetivo es ofrecer una experiencia más sencilla y rápida para quien contacta a Casa Natural desde Instagram.</p>
+
+        <h2>3. Datos que se pueden procesar</h2>
+        <ul>
+          <li>El texto del comentario publicado por el usuario en Instagram.</li>
+          <li>Identificadores técnicos y de usuario facilitados por Meta/Instagram cuando se proporcionan en el contexto del evento, como identificadores de comentario, de media o de usuario.</li>
+          <li>Metadatos técnicos necesarios para procesar el evento, registrar el estado de la campaña y enviar la respuesta privada correspondiente.</li>
+        </ul>
+        <p>No almacenamos contraseñas de Instagram ni credenciales de acceso de la cuenta de usuario.</p>
+
+        <h2>4. Respuestas automáticas y flujo de confirmación</h2>
+        <p>Cuando un comentario cumple una condición de campaña, el sistema puede enviar una respuesta privada automática y, si la campaña así lo requiere, proseguir con un flujo de confirmación. Si se pulsa un botón o se confirma un mensaje de continuación, esa acción puede dar paso a más mensajes automáticos y a la entrega de un recurso o enlace asociado a la campaña.</p>
+
+        <h2>5. Campañas, estados de entrega y eventos</h2>
+        <p>El sistema registra información sobre la campaña seleccionada, el estado de la interacción, si se ha enviado una respuesta privada, si se ha entregado un recurso y si la interacción ha avanzado a un estado posterior. También se almacenan eventos de webhook y registros técnicos para depurar incidencias y garantizar el funcionamiento del servicio.</p>
+
+        <h2>6. Webhooks, logs y tecnologías utilizadas</h2>
+        <p>Los eventos pueden llegar desde Meta/Instagram mediante webhooks. El sistema puede guardar el payload recibido, el tipo de evento y un registro técnico del procesamiento. Los datos se almacenan en una base de datos PostgreSQL/Neon y se procesan desde funciones server-side alojadas en Netlify.</p>
+
+        <h2>7. Plataforma de origen</h2>
+        <p>Meta/Instagram es la plataforma que origina los eventos y los datos de interacción. Casa Natural usa esos datos únicamente para gestionar la automatización descrita en esta política.</p>
+
+        <h2>8. Finalidad y base jurídica</h2>
+        <p>El tratamiento se realiza para responder a la interacción iniciada por el usuario, gestionar campañas concretas y prestar un servicio de atención automatizada. En la práctica, la base jurídica está relacionada con la gestión de la solicitud del usuario, la ejecución del servicio y el interés legítimo del operador para mantener el funcionamiento técnico y de seguridad de la automatización.</p>
+
+        <h2>9. Conservación de los datos</h2>
+        <p>Conservamos los datos solo el tiempo necesario para prestar el servicio, resolver incidencias técnicas, mantener registros de seguridad y cumplir con obligaciones técnicas o de auditoría. Los registros de eventos y las interacciones se revisan periódicamente para evitar conservar información innecesaria.</p>
+
+        <h2>10. Derechos de los usuarios</h2>
+        <p>Puedes solicitar acceso, corrección, limitación u oposición al tratamiento, así como solicitar la eliminación de datos cuando sea aplicable. Para ello, puedes contactar con Casa Natural en <a href="mailto:hola@casanatural.studio">hola@casanatural.studio</a> o a través del sitio web <a href="https://casanatural.studio">https://casanatural.studio</a>.</p>
+
+        <h2>11. Otras aclaraciones</h2>
+        <ul>
+          <li>No vendemos tus datos personales.</li>
+          <li>No realizamos scraping de perfiles, contenidos ni datos de terceros.</li>
+          <li>No almacenamos contraseñas de Instagram.</li>
+          <li>No verificamos ni afirmamos que el estado de seguimiento de un usuario esté técnicamente verificado por el sistema; la automatización puede usar mensajes de confirmación para continuar el flujo, pero no se basa en una verificación de seguimiento como condición técnica de la que se haga una afirmación de estado oficial.</li>
+        </ul>
+
+        <div class="pill">Actualizado el 15 de julio de 2026</div>
+      </div>
+    </main>
+  </body>
+</html>
