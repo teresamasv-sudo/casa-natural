@@ -1,0 +1,869 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>El menÃº de esta semana Â· Casa Natural</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Courier+Prime:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#E8E2D6;
+    --paper:#F5F1E8;
+    --ink:#292720;
+    --muted:#69645B;
+    --faint:#8A847A;
+    --line:#C9C2B7;
+    --line-strong:#9C9589;
+    --stone:#B8B1A3;
+    box-sizing:border-box;
+    padding-top:env(safe-area-inset-top, 0px);
+    padding-bottom:env(safe-area-inset-bottom, 0px);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#1C1A16;--paper:#24211C;--ink:#EDE7DA;--muted:#ADA598;
+      --faint:#8A8377;--line:#3A362E;--line-strong:#4A453B;--stone:#4A453B;
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#1C1A16;--paper:#24211C;--ink:#EDE7DA;--muted:#ADA598;
+    --faint:#8A8377;--line:#3A362E;--line-strong:#4A453B;--stone:#4A453B;
+  }
+  *,*::before,*::after{box-sizing:border-box;}
+  html{scroll-padding-top:calc(env(safe-area-inset-top, 0px) + 80px);-webkit-text-size-adjust:100%;}
+  body{
+    margin:0;background:var(--bg);color:var(--ink);
+    font-family:"Courier Prime","Courier New",Courier,monospace;
+    font-size:15px;line-height:1.7;
+  }
+  .sheet{
+    max-width:660px;margin:0 auto;background:var(--paper);
+    border-left:1px solid var(--line-strong);border-right:1px solid var(--line-strong);
+    min-height:100vh;
+  }
+  header{text-align:center;padding:38px 26px 26px;}
+  .brandmark{font-size:11px;letter-spacing:3px;color:var(--muted);}
+  .brandsub{font-size:10px;letter-spacing:2px;color:var(--muted);margin-top:9px;}
+  h1{
+    font-family:"Cormorant Garamond",Georgia,serif;font-weight:400;
+    font-size:clamp(32px,9vw,44px);line-height:1.12;margin:26px 0 14px;
+  }
+  .week{font-size:11px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;}
+  .intro{
+    font-family:"Cormorant Garamond",Georgia,serif;font-size:19px;line-height:1.55;
+    margin:24px 0 0;text-align:left;
+  }
+  .intro em{font-style:italic;}
+  .intro p{margin:0 0 14px;}
+  .intro p:last-child{margin-bottom:0;}
+
+  .servings{background:var(--stone);margin:28px 26px 0;padding:22px 20px;text-align:center;}
+  .servings p.lbl{margin:0 0 14px;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--ink);}
+  .stepper{display:flex;align-items:center;justify-content:center;gap:18px;}
+  .stepper button{
+    font-family:inherit;font-size:20px;line-height:1;width:42px;height:42px;
+    background:var(--paper);color:var(--ink);border:1px solid var(--ink);cursor:pointer;
+  }
+  .stepper button:active{background:var(--ink);color:var(--paper);}
+  .stepper .num{font-family:"Cormorant Garamond",Georgia,serif;font-size:38px;line-height:1;min-width:70px;color:var(--ink);}
+  .servings p.hint{margin:14px 0 0;font-size:11px;color:var(--ink);opacity:.75;}
+
+  nav{
+    position:sticky;top:env(safe-area-inset-top, 0px);z-index:9;background:var(--paper);
+    border-top:1px solid var(--line);border-bottom:1px solid var(--line);
+    margin-top:30px;padding:12px 26px;overflow-x:auto;
+  }
+  .tabs{display:flex;gap:26px;min-width:max-content;justify-content:center;}
+  .tab{
+    font-family:inherit;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;
+    background:none;border:0;border-bottom:1px solid transparent;color:var(--muted);
+    padding:4px 0;cursor:pointer;white-space:nowrap;
+  }
+  .tab[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--ink);}
+
+  section[hidden]{display:none;}
+  .panel{padding:30px 26px 60px;}
+
+  .standing{border:1px solid var(--line-strong);padding:20px;margin-bottom:30px;background:var(--bg);}
+  .standing .tagline{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin:0 0 8px;}
+  .standing h3{font-family:"Cormorant Garamond",Georgia,serif;font-weight:600;font-size:22px;margin:0 0 8px;}
+  .standing p{margin:0;font-size:13px;line-height:1.7;color:var(--muted);}
+  .standing .toggle{
+    font-family:inherit;background:none;border:0;padding:12px 0 0;cursor:pointer;
+    font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--ink);
+    border-bottom:1px solid var(--ink);
+  }
+  .standing .body{margin-top:16px;}
+
+  .day{margin-bottom:30px;}
+  .day > h2{font-family:"Cormorant Garamond",Georgia,serif;font-weight:600;font-size:24px;margin:0 0 4px;}
+  .day > .rule{height:1px;background:var(--line);margin-bottom:14px;}
+
+  .dish{border-bottom:1px solid var(--line);}
+  .day .dish:last-child{border-bottom:0;}
+  .dish-head{
+    width:100%;background:none;border:0;padding:14px 0;text-align:left;cursor:pointer;
+    font-family:inherit;color:inherit;display:flex;gap:14px;align-items:flex-start;
+  }
+  .slot{flex:none;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);width:56px;padding-top:6px;}
+  .dish h3{font-family:"Cormorant Garamond",Georgia,serif;font-weight:600;font-size:20px;line-height:1.3;margin:0 0 3px;}
+  .dish p.note{margin:0;font-size:13px;color:var(--muted);line-height:1.6;}
+  .reuse{display:block;margin-top:6px;font-size:11px;color:var(--ink);opacity:.75;}
+  .plus{flex:none;margin-left:auto;color:var(--muted);font-size:16px;padding-top:4px;display:inline-block;transition:transform .2s ease;}
+  .dish[data-open="1"] .plus{transform:rotate(45deg);}
+
+  .dish-body{padding:2px 0 20px 70px;}
+  @media (max-width:520px){ .dish-body{padding-left:0;} }
+  .dish-body h4{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin:14px 0 8px;font-weight:400;}
+  .dish-body ul{margin:0;padding-left:16px;}
+  .dish-body ol{margin:0;padding-left:18px;}
+  .dish-body li{margin-bottom:6px;font-size:14px;line-height:1.65;}
+
+  .moment{border-bottom:1px solid var(--line);padding:20px 0;}
+  .moment:last-child{border-bottom:0;}
+  .moment .when{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin:0 0 8px;}
+  .moment h3{font-family:"Cormorant Garamond",Georgia,serif;font-weight:600;font-size:21px;margin:0 0 10px;}
+  .moment p{margin:0 0 10px;font-size:14px;line-height:1.7;}
+  .moment p:last-child{margin-bottom:0;}
+  .moment .mins{color:var(--muted);font-size:12px;}
+
+  .counter{display:flex;align-items:center;gap:14px;padding:14px 0 18px;border-bottom:1px solid var(--line);margin-bottom:22px;}
+  .bar{flex:1;height:6px;background:var(--bg);border:1px solid var(--line);}
+  .bar i{display:block;height:100%;background:var(--ink);width:0;transition:width .25s ease;}
+  .counter span{font-size:11px;letter-spacing:1px;color:var(--muted);white-space:nowrap;}
+
+  .group{margin-bottom:26px;}
+  .group h3{
+    font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);
+    font-weight:400;margin:0 0 10px;padding-bottom:8px;border-bottom:1px solid var(--line);
+  }
+  label.item{display:flex;gap:12px;align-items:flex-start;padding:9px 0;cursor:pointer;font-size:14px;line-height:1.6;}
+  label.item input{
+    appearance:none;-webkit-appearance:none;flex:none;width:17px;height:17px;margin-top:4px;
+    border:1px solid var(--line-strong);background:var(--paper);cursor:pointer;position:relative;
+  }
+  label.item input:checked{background:var(--ink);border-color:var(--ink);}
+  label.item input:checked::after{
+    content:"";position:absolute;left:5px;top:1px;width:4px;height:9px;
+    border:solid var(--paper);border-width:0 1.5px 1.5px 0;transform:rotate(45deg);
+  }
+  label.item input:checked + span{text-decoration:line-through;color:var(--faint);}
+  .qty{color:var(--muted);}
+
+  .acts{display:flex;gap:12px;flex-wrap:wrap;margin-top:22px;}
+  .acts button{
+    font-family:inherit;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;
+    padding:14px 22px;cursor:pointer;border:1px solid var(--ink);background:var(--paper);color:var(--ink);
+  }
+  .acts button.solid{background:var(--ink);color:var(--paper);}
+
+  .aside{background:var(--bg);border:1px solid var(--line);padding:18px 20px;margin-bottom:26px;font-size:13px;line-height:1.7;color:var(--muted);}
+  .aside strong{color:var(--ink);font-weight:400;}
+
+  footer{text-align:center;padding:34px 26px 46px;border-top:1px solid var(--line);}
+  footer p{margin:0 0 8px;font-size:11px;letter-spacing:1.5px;color:var(--muted);}
+  footer .sig{font-family:"Cormorant Garamond",Georgia,serif;font-style:italic;font-size:19px;color:var(--ink);letter-spacing:0;}
+
+  /* Semana Resuelta: una lectura continua, como un cuaderno abierto. */
+  :root{
+    --bg:#e4b58d;
+    --paper:#f8ecd7;
+    --ink:#432936;
+    --muted:#77594f;
+    --line:#d5b493;
+    --line-strong:#a96b48;
+    --stone:#f0d6b4;
+    --terracotta:#b95d36;
+    --tomato:#c94c36;
+    --plum:#54263f;
+    --butter:#f0d878;
+    --aqua:#58b9c5;
+    --peach:#e9a184;
+  }
+  body{background:var(--bg);font-size:16px;line-height:1.72;}
+  .sheet{max-width:none;background:var(--paper);border:0;overflow:hidden;}
+  .hero{height:min(92svh,880px);min-height:620px;position:relative;background:#4d4031 url('/hero-semana-resuelta.png') center 48%/cover no-repeat;display:grid;place-items:center;color:#fffaf0;text-align:center;isolation:isolate;}
+  .hero:before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(22,18,13,.46),rgba(22,18,13,.16) 38%,rgba(22,18,13,.02) 62%,rgba(22,18,13,.32));z-index:-1;}
+  .hero-copy{position:absolute;top:clamp(38px,9vh,110px);left:50%;transform:translateX(-50%);width:min(92%,760px);padding:26px 22px;margin:0;text-shadow:0 2px 28px #30271f99;}
+  .hero h1{font-size:clamp(54px,10vw,112px);letter-spacing:.015em;line-height:.88;margin:0 0 22px;}
+  .hero .dek{font:italic clamp(18px,2.2vw,24px)/1.4 "Cormorant Garamond",Georgia,serif;margin:0 0 18px;}
+  .hero .week{color:inherit;font-size:11px;letter-spacing:2px;}
+  .hero .keep-reading{position:absolute;bottom:23px;color:inherit;text-decoration:none;font-size:10px;letter-spacing:2px;text-transform:uppercase;}
+  .back-to-top{display:table;width:max-content;margin:30px auto 0;color:var(--muted);font:italic 14px "Cormorant Garamond",Georgia,serif;text-decoration:none;border-bottom:1px solid #b9aa95;padding:0 2px 3px;}
+  .back-to-top:hover,.back-to-top:focus-visible{color:var(--ink);border-color:var(--ink);}
+  .back-to-top span{font:11px "Courier Prime",monospace;margin-right:5px;}
+  .chapter{max-width:1040px;margin:auto;padding:clamp(54px,9vw,112px) clamp(22px,7vw,90px);}
+  .eyebrow{font-size:10px;letter-spacing:2.5px;text-transform:uppercase;color:var(--muted);margin:0 0 18px;}
+  .chapter-title{font:400 clamp(38px,6vw,64px)/1.02 "Cormorant Garamond",Georgia,serif;margin:0 0 20px;}
+  .note{max-width:660px;margin:0 auto;text-align:left;padding:0 0 14px;}
+  .note .intro{font-size:clamp(20px,2.5vw,25px);line-height:1.55;margin:0;}
+  .note .signature{font:italic 22px "Cormorant Garamond",Georgia,serif;text-align:right;margin:20px 5% 0;}
+  .servings{max-width:500px;margin:12px auto 30px;background:transparent;padding:26px 12px;border-block:1px solid var(--line);}
+  .servings p.lbl{font-size:11px;letter-spacing:1.8px;}
+  .stepper{gap:24px}.stepper button{border-radius:50%;width:44px;height:44px;background:transparent;border-color:var(--line-strong);font-size:22px;}
+  .stepper .num{font-size:54px;min-width:64px}.servings p.hint{font-size:12px;}
+  nav{position:sticky;top:0;margin:0;z-index:10;background:#f8ecd7ed;backdrop-filter:blur(10px);padding:9px 16px;border-color:var(--line);}
+  .tabs{gap:clamp(18px,4vw,42px)}.tab{font-size:10px;letter-spacing:1px;text-decoration:none;}
+  .tab:hover,.tab:focus-visible{color:var(--tomato);}
+  .panel{max-width:1020px;margin:auto;padding:clamp(42px,7vw,80px) clamp(22px,6vw,72px);}
+  #menu>.aside{border:0;border-left:2px solid var(--terracotta);background:transparent;padding:3px 0 3px 20px;margin:0 auto 42px;max-width:690px;font:italic 20px/1.6 "Cormorant Garamond",Georgia,serif;}
+  .standing{background:transparent;border:0;border-block:1px solid var(--line);padding:22px 0;margin:0 0 28px;}
+  .day{margin:0 auto 34px;max-width:760px;}
+  .day>h2{font-size:33px;font-weight:400;color:var(--terracotta);}
+  .dish{border-color:var(--line)}.dish-head{padding:19px 0;gap:12px;}
+  .dish h3{font-size:clamp(21px,3vw,26px);font-weight:500;}
+  .dish-body{font-size:15px}.dish-body li{font-size:15px;}
+  .plus{font-size:9px;letter-spacing:1px;text-transform:uppercase;border-bottom:1px solid var(--line-strong);padding:5px 0;white-space:nowrap;}
+  .dish[data-open="1"] .plus{transform:none}.dish[data-open="1"] .plus:after{content:" âˆ’"}
+  .moment{border-color:var(--line);padding:19px 0}.moment h3{font-size:27px;font-weight:500;}
+  #batch{max-width:none;background:#e8dfd0;}
+  #batch .chapter{padding-top:0;padding-bottom:40px;}
+  .flow-note{max-width:820px;margin:0 auto 32px;padding:25px clamp(20px,5vw,46px);border-block:1px solid #b8a68d;text-align:center;transform:rotate(-.35deg);}
+  .flow-note p{font:italic clamp(20px,3vw,28px)/1.5 "Cormorant Garamond",Georgia,serif;margin:8px 0;}
+  .flow-note .flow{font:12px/2 "Courier Prime",monospace;letter-spacing:.5px;}
+  .prep-list{max-width:680px;margin:26px auto 0;}
+  .prep-list label{display:flex;gap:14px;align-items:flex-start;padding:13px 0;border-bottom:1px solid #cfc2ae;cursor:pointer;}
+  .prep-list input{accent-color:var(--tomato);width:18px;height:18px;margin-top:4px;flex:none;}
+  .prep-list input:checked+span{text-decoration:line-through;opacity:.55;}
+  #compra{max-width:760px;}
+  #compra:before{content:"LA COMPRA";display:block;font:400 clamp(38px,6vw,64px)/1 "Cormorant Garamond",Georgia,serif;margin-bottom:8px;}
+  #compra:after{content:"Y compra alguna cosa que no estÃ© en la lista. Siempre hace falta.";display:block;font:italic 20px "Cormorant Garamond",Georgia,serif;margin-top:24px;}
+  .counter{border:0;justify-content:flex-start;padding:0;margin:0 0 25px;}
+  .bar{max-width:160px;height:3px;border:0;background:#ead9bf}.bar i{background:var(--tomato)}
+  #count{font-size:12px;}
+  .group h3{font-size:11px;border-color:var(--line);}
+  label.item{padding:10px 0;font-size:15px;}
+  label.item input{width:19px;height:19px;border-radius:50%;}
+  .home-pantry{padding:18px 20px;margin:18px 0 26px;border-block:1px dashed var(--terracotta);background:#f2ddbd;}
+  .home-pantry h3{font:italic 23px "Cormorant Garamond",Georgia,serif;margin:0 0 8px;}
+  .home-pantry ul{margin:0;padding-left:20px;font-size:14px;}
+  .special{background:#f4dfc4;padding:clamp(48px,8vw,90px) 22px;text-align:center;}
+  .special-inner{max-width:720px;margin:auto;}
+  .special .chapter-title{margin-bottom:8px;}
+  .special .recipe-name{font:italic clamp(32px,6vw,54px)/1.1 "Cormorant Garamond",Georgia,serif;margin:12px 0;}
+  .special .recipe-meta{font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);}
+  .special .eyebrow{color:var(--terracotta);}
+  .special .recipe-name{color:var(--plum);}
+  .special .recipe-copy{max-width:540px;margin:18px auto;font:italic 20px/1.55 "Cormorant Garamond",Georgia,serif;}
+  details.recipe{max-width:540px;margin:20px auto 0;text-align:left;border-top:1px solid var(--line);padding-top:12px;}
+  details.recipe summary{cursor:pointer;list-style:none;text-align:center;font-size:10px;letter-spacing:2px;text-transform:uppercase;padding:12px;}
+  details.recipe summary:after{content:" â†“"}details.recipe[open] summary:after{content:" â†‘"}
+  footer{padding:60px 24px 72px;border:0;background:#e8dfd0;}
+  footer p{font-size:10px;letter-spacing:1.2px;}footer .sig{font-size:22px;}
+  footer .closing{font:italic clamp(26px,5vw,42px)/1.15 "Cormorant Garamond",Georgia,serif;color:var(--ink);letter-spacing:0;margin:0 0 20px;}
+  footer .back{display:inline-block;margin-top:25px;color:var(--ink);font-size:10px;letter-spacing:1.5px;text-decoration:none;border-bottom:1px solid var(--line-strong);padding-bottom:5px;}
+  @media(max-width:600px){.hero{height:92svh;min-height:600px;background-position:57% center}.hero-copy{top:42px;width:96%;padding:22px 14px}.hero h1{font-size:clamp(52px,15vw,78px)}.hero .dek{max-width:290px;margin-inline:auto}.tabs{justify-content:flex-start}.tab{font-size:9px}.chapter{padding-inline:23px}.panel{padding-inline:22px}.slot{width:53px}.dish-body{padding-left:0}.acts button{flex:1;padding:13px 10px}.flow-note{margin-inline:-5px}}
+</style>
+</head>
+<body>
+<div class="sheet">
+
+  <header id="inicio" class="hero" aria-label="La mesa de Casa Natural">
+    <div class="hero-copy">
+      <h1>Semana<br>Resuelta</h1>
+      <p class="dek">Nueve a la mesa · cenas de lunes a viernes y fin de semana completo · cinco tuppers</p>
+      <p class="week">28 SEPTIEMBRE — 4 OCTUBRE</p>
+    </div>
+    <a class="keep-reading" href="#nota">↓ &nbsp; seguir leyendo</a>
+  </header>
+
+  <section id="nota" class="chapter note">
+    <p class="eyebrow">02 · Una nota de Teresa</p>
+    <h2 class="chapter-title">Esta semana</h2>
+    <div class="intro">
+      <p>Esta semana hay muchos frentes abiertos, y necesito cocinar lo justo y necesario.</p>
+      <p>Todo se apoya en una sola sesión del domingo: un pollo despiezado a baja temperatura, una olla grande de pisto y el caldo hecho de noche en la crockpot mientras duermo. De ahí salen los tuppers de la semana y media cena de cada día.</p>
+      <p>Las comidas entre semana no están: yo como en casa de mi madre y en casa solo se cena. Si en la tuya se come, el pisto y el pollo del domingo dan de sobra para completar.</p>
+    </div>
+    <p class="signature">— Teresa</p>
+    <a class="back-to-top" href="#inicio"><span>↑</span> volver arriba</a>
+  </section>
+
+  <div class="servings">
+    <p class="lbl">¿Cuántos coméis en casa?</p>
+    <div class="stepper">
+      <button id="minus" aria-label="Quitar un comensal">−</button>
+      <span class="num" id="n">9</span>
+      <button id="plus" aria-label="Añadir un comensal">+</button>
+    </div>
+    <p class="hint">Las cantidades del menú y de la compra se ajustan solas.</p>
+  </div>
+  <a class="back-to-top" href="#inicio" style="margin-top:14px"><span>↑</span> volver arriba</a>
+
+  <nav aria-label="En esta página">
+    <div class="tabs">
+      <a class="tab" href="#menu">La semana</a>
+      <a class="tab" href="#jugada">Cómo me organizo</a>
+      <a class="tab" href="#compra">La compra</a>
+    </div>
+  </nav>
+
+  <section id="menu" class="panel">
+    <p class="eyebrow">04 · La semana</p>
+    <h2 class="chapter-title" style="text-align:center;margin-bottom:8px">Una cosa lleva a la otra</h2>
+    <p style="text-align:center;color:var(--muted);margin:0 auto 32px;max-width:580px">Comidas y cenas de lunes a domingo. Abre <em>VER RECETA</em> cuando quieras saber cómo va.</p>
+
+    <div class="standing">
+      <p class="tagline">La sesión del domingo</p>
+      <h3>Pollo, pisto y caldo</h3>
+      <p>Todo se apoya en una sola sesión del domingo. El pollo va a baja temperatura y en la sartén para que quede bien. El pisto y el caldo se hacen a la vez y son la base de la semana.</p>
+      <button class="toggle" id="gzToggle">Ver cómo lo hago</button>
+      <div class="body" id="gzBody" hidden>
+        <h4 style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin:0 0 8px;font-weight:400;">La idea</h4>
+        <ul style="margin:0 0 14px;padding-left:16px;font-size:14px;">
+          <li>Deshueso el pollo y lo dejo a baja temperatura.</li>
+          <li>Una olla grande de pisto para los tuppers y para el lunes.</li>
+          <li>Los huesos y la carcasa a la crockpot con puerro, zanahoria, cebolla y laurel.</li>
+        </ul>
+        <h4 style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin:0 0 8px;font-weight:400;">Cómo va</h4>
+        <ol style="margin:0;padding-left:18px;font-size:14px;">
+          <li>El pollo se deshuesa y se sella en la sartén para que tenga color y textura.</li>
+          <li>El pisto se hace en una olla grande y se deja reposar para que gane sabor.</li>
+          <li>El caldo cuela y desgrasa en frío y luego sostiene la sopa, la crema y el arroz.</li>
+        </ol>
+      </div>
+    </div>
+
+    <div class="day">
+      <h2>Lunes</h2><div class="rule"></div>
+      <article class="dish">
+        <button class="dish-head">
+          <span class="slot">Cena</span>
+          <span>
+            <h3>Sopa de fideos y pisto con huevo</h3>
+            <p class="note">Las dos cosas están hechas del domingo. Cero cocina el día que peor sienta cocinar.</p>
+            <span class="reuse">↻ Caldo del domingo · pisto del domingo</span>
+          </span>
+          <span class="plus">+</span>
+        </button>
+        <div class="dish-body" hidden>
+          <h4>Ingredientes</h4>
+          <ul>
+            <li><span data-q="2.5" data-u="L"></span> de caldo y <span data-q="300" data-u="g"></span> de fideo fino</li>
+            <li>Una buena parte del pisto</li>
+            <li><span data-q="14" data-u="u"></span> huevos</li>
+          </ul>
+          <h4>Cómo va</h4>
+          <ol>
+            <li>Calienta el caldo y cuece los fideos seis u ocho minutos.</li>
+            <li>Reparte el pisto templado en los platos y casca un huevo encima de cada uno.</li>
+            <li>Al horno cinco minutos, o tapado en la sartén, hasta que la clara cuaje y la yema no.</li>
+          </ol>
+        </div>
+      </article>
+    </div>
+
+    <div class="day">
+      <h2>Martes</h2><div class="rule"></div>
+      <article class="dish">
+        <button class="dish-head">
+          <span class="slot">Cena</span>
+          <span>
+            <h3>Bacalao dourado</h3>
+            <p class="note">Patata paja, cebolla y huevo cremoso. Un plato que no da trabajo pero sí presencia.</p>
+            <span class="reuse">↻ Lomos de bacalao del congelador</span>
+          </span>
+          <span class="plus">+</span>
+        </button>
+        <div class="dish-body" hidden>
+          <h4>Ingredientes</h4>
+          <ul>
+            <li><span data-q="1.2" data-u="kg"></span> de lomos de bacalao congelados</li>
+            <li><span data-q="1.5" data-u="kg"></span> de patata paja</li>
+            <li><span data-q="14" data-u="u"></span> huevos</li>
+            <li><span data-q="3" data-u="u"></span> cebollas grandes</li>
+            <li>Perejil y aceite de oliva</li>
+          </ul>
+          <h4>Cómo va</h4>
+          <ol>
+            <li>Escurre bien el bacalao descongelado y sécalo con papel antes de desmigarlo a mano.</li>
+            <li>Pochas la cebolla en juliana muy despacio, hasta que esté dulce.</li>
+            <li>Añade el bacalao desmigado y dale unos minutos.</li>
+            <li>Fuera del fuego, incorpora la patata paja y los huevos batidos. Remueve sin parar: el huevo tiene que quedar cremoso, nunca cuajado del todo.</li>
+            <li>Perejil picado por encima y a la mesa enseguida.</li>
+          </ol>
+        </div>
+      </article>
+    </div>
+
+    <div class="day">
+      <h2>Miércoles</h2><div class="rule"></div>
+      <article class="dish">
+        <button class="dish-head">
+          <span class="slot">Cena</span>
+          <span>
+            <h3>Crema de puerro y patata con filete de cerdo</h3>
+            <p class="note">La crema sola se queda corta para nueve. El filete la completa y no da ningún trabajo.</p>
+            <span class="reuse">↻ Caldo del domingo</span>
+          </span>
+          <span class="plus">+</span>
+        </button>
+        <div class="dish-body" hidden>
+          <h4>Ingredientes</h4>
+          <ul>
+            <li><span data-q="6" data-u="u"></span> puerros y <span data-q="800" data-u="g"></span> de patata</li>
+            <li><span data-q="1.5" data-u="L"></span> de caldo</li>
+            <li><span data-q="12" data-u="u"></span> filetes de lomo de cerdo</li>
+            <li>Ajo y perejil</li>
+          </ul>
+          <h4>Cómo va</h4>
+          <ol>
+            <li>Pochas el puerro en rodajas sin que coja color, añades la patata en dados y cubres con el caldo.</li>
+            <li>Veinte minutos; tritura y rectifica de sal.</li>
+            <li>Los filetes a la plancha bien caliente, vuelta y vuelta, con ajo y perejil picados por encima al sacarlos.</li>
+          </ol>
+        </div>
+      </article>
+    </div>
+
+    <div class="day">
+      <h2>Jueves</h2><div class="rule"></div>
+      <article class="dish">
+        <button class="dish-head">
+          <span class="slot">Cena</span>
+          <span>
+            <h3>Bandeja de verduras al horno con salchichas</h3>
+            <p class="note">Una bandeja, un encendido y cuarenta minutos para hacer otra cosa.</p>
+            <span class="reuse">↻ Horno y bandeja única</span>
+          </span>
+          <span class="plus">+</span>
+        </button>
+        <div class="dish-body" hidden>
+          <h4>Ingredientes</h4>
+          <ul>
+            <li><span data-q="3" data-u="u"></span> calabacines, <span data-q="2" data-u="u"></span> berenjenas, <span data-q="3" data-u="u"></span> pimientos y <span data-q="4" data-u="u"></span> cebollas</li>
+            <li><span data-q="1" data-u="kg"></span> de patatas</li>
+            <li><span data-q="18" data-u="u"></span> salchichas</li>
+            <li>Aceite de oliva, orégano y sal</li>
+          </ul>
+          <h4>Cómo va</h4>
+          <ol>
+            <li>Corta la patata fina y la berenjena en trozos grandes: así todo termina a la vez.</li>
+            <li>Todo en la bandeja con un buen chorro de aceite, sal y orégano. Horno a 200 °C.</li>
+            <li>A los veinte minutos, remueve y coloca las salchichas encima.</li>
+            <li>Veinte minutos más hasta que la patata esté tierna y las salchichas doradas.</li>
+          </ol>
+        </div>
+      </article>
+    </div>
+
+    <div class="day">
+      <h2>Viernes</h2><div class="rule"></div>
+      <article class="dish">
+        <button class="dish-head">
+          <span class="slot">Cena</span>
+          <span>
+            <h3>Empanada de berberechos y croque monsieur</h3>
+            <p class="note">Noche de picoteo. La empanada para los mayores, los croques para los niños.</p>
+            <span class="reuse">↻ El jueves deja hecha la empanada</span>
+          </span>
+          <span class="plus">+</span>
+        </button>
+        <div class="dish-body" hidden>
+          <h4>Para la empanada</h4>
+          <ul>
+            <li>Masa: <span data-q="500" data-u="g"></span> de harina, <span data-q="100" data-u="ml"></span> de aceite, <span data-q="100" data-u="ml"></span> de vino blanco, <span data-q="100" data-u="ml"></span> de agua templada, <span data-q="20" data-u="g"></span> de levadura fresca y sal</li>
+            <li>Relleno: <span data-q="2" data-u="u"></span> cebollas, <span data-q="1" data-u="u"></span> pimiento, <span data-q="400" data-u="g"></span> de berberechos, tomate triturado y pimentón</li>
+          </ul>
+          <h4>Para los croques</h4>
+          <ul>
+            <li><span data-q="24" data-u="u"></span> rebanadas de pan de molde</li>
+            <li><span data-q="12" data-u="u"></span> lonchas de jamón cocido y <span data-q="12" data-u="u"></span> de queso</li>
+            <li>Bechamel ligera: <span data-q="50" data-u="g"></span> de mantequilla, <span data-q="50" data-u="g"></span> de harina y <span data-q="600" data-u="ml"></span> de leche</li>
+            <li><span data-q="200" data-u="g"></span> de queso rallado</li>
+          </ul>
+          <h4>Cómo va</h4>
+          <ol>
+            <li>La masa en la Thermomix son dos minutos. Deja que repose mientras haces el sofrito.</li>
+            <li>Pochan cebolla y pimiento muy despacio, añades el tomate y el pimentón fuera del fuego, y por último los berberechos escurridos.</li>
+            <li>Monta la empanada, píntala con huevo y hornea a 190 °C, cuarenta minutos.</li>
+            <li>Los croques: bechamel entre las dos rebanadas, jamón, queso, más bechamel por encima y queso rallado. Al horno hasta que gratinen.</li>
+          </ol>
+        </div>
+      </article>
+    </div>
+
+    <div class="day">
+      <h2>Sábado</h2><div class="rule"></div>
+      <article class="dish">
+        <button class="dish-head">
+          <span class="slot">Comida</span>
+          <span>
+            <h3>Lentejas estofadas</h3>
+            <p class="note">Entra octubre y ya piden cuchara.</p>
+            <span class="reuse">↻ Un potaje para una tarde tranquila</span>
+          </span>
+          <span class="plus">+</span>
+        </button>
+        <div class="dish-body" hidden>
+          <h4>Ingredientes</h4>
+          <ul>
+            <li><span data-q="1" data-u="kg"></span> de lentejas</li>
+            <li><span data-q="2" data-u="u"></span> zanahorias, <span data-q="1" data-u="u"></span> cebolla, <span data-q="1" data-u="u"></span> pimiento verde y <span data-q="2" data-u="u"></span> patatas</li>
+            <li><span data-q="2" data-u="u"></span> chorizos, laurel y pimentón</li>
+          </ul>
+          <h4>Cómo va</h4>
+          <ol>
+            <li>Sofríe la verdura muy picada, añade el pimentón fuera del fuego.</li>
+            <li>Lentejas, laurel, chorizo y agua que las cubra tres dedos. Cuarenta minutos a fuego lento.</li>
+            <li>La patata en trozos a media cocción, que espesa sin necesidad de harina.</li>
+          </ol>
+        </div>
+      </article>
+      <article class="dish">
+        <button class="dish-head">
+          <span class="slot">Cena</span>
+          <span>
+            <h3>Hamburguesas a la plancha</h3>
+            <p class="note">Largas conversaciones y la mesa bien surtida.</p>
+            <span class="reuse">↻ Panes, lechuga, tomate, cebolla y queso</span>
+          </span>
+          <span class="plus">+</span>
+        </button>
+        <div class="dish-body" hidden>
+          <h4>Ingredientes</h4>
+          <ul>
+            <li><span data-q="14" data-u="u"></span> hamburguesas</li>
+            <li><span data-q="14" data-u="u"></span> panes</li>
+            <li>Lechuga, tomate, cebolla y queso</li>
+          </ul>
+        </div>
+      </article>
+    </div>
+
+    <div class="day">
+      <h2>Domingo</h2><div class="rule"></div>
+      <article class="dish">
+        <button class="dish-head">
+          <span class="slot">Comida</span>
+          <span>
+            <h3>Arroz al horno</h3>
+            <p class="note">La olla de barro y la costra de arriba: la pieza del domingo.</p>
+            <span class="reuse">↻ El caldo del domingo y la costilla de cerdo</span>
+          </span>
+          <span class="plus">+</span>
+        </button>
+        <div class="dish-body" hidden>
+          <h4>Ingredientes</h4>
+          <ul>
+            <li><span data-q="800" data-u="g"></span> de arroz redondo y <span data-q="1.6" data-u="L"></span> de caldo</li>
+            <li><span data-q="800" data-u="g"></span> de costilla de cerdo troceada y <span data-q="1" data-u="u"></span> morcilla</li>
+            <li><span data-q="400" data-u="g"></span> de garbanzos cocidos</li>
+            <li><span data-q="2" data-u="u"></span> patatas, <span data-q="3" data-u="u"></span> tomates y <span data-q="1" data-u="u"></span> cabeza de ajos entera</li>
+            <li>Azafrán o colorante</li>
+          </ul>
+          <h4>Cómo va</h4>
+          <ol>
+            <li>Dora la costilla en la propia cazuela de barro o en una bandeja honda.</li>
+            <li>Añade el tomate rallado, los garbanzos y el arroz, y remueve.</li>
+            <li>El caldo caliente, la cabeza de ajos en el centro, la patata en rodajas y la morcilla por encima.</li>
+            <li>Horno a 200 °C, unos 20 minutos, hasta que el arroz esté seco y con la costra de arriba hecha.</li>
+          </ol>
+        </div>
+      </article>
+      <article class="dish">
+        <button class="dish-head">
+          <span class="slot">Cena</span>
+          <span>
+            <h3>Restos de la semana</h3>
+            <p class="note">Lo que quede por la nevera. Y por la noche, la sesión de la semana que viene.</p>
+            <span class="reuse">↻ Todo lo que sobre</span>
+          </span>
+          <span class="plus">+</span>
+        </button>
+        <div class="dish-body" hidden>
+          <h4>Cómo va</h4>
+          <ol>
+            <li>Lo que quede por la nevera y la nevera se repasa antes de acostarte.</li>
+            <li>Lo que se salga del menú del domingo, a cajas y al congelador para tirar de la próxima semana.</li>
+          </ol>
+        </div>
+      </article>
+    </div>
+    <a class="back-to-top" href="#inicio"><span>↑</span> volver arriba</a>
+  </section>
+
+  <section id="batch" class="panel">
+    <div id="jugada" class="chapter" style="padding-bottom:28px">
+      <p class="eyebrow">05 · Cómo me organizo</p>
+      <h2 class="chapter-title">La sesión del domingo</h2>
+      <div class="flow-note">
+        <p>Un pollo, un pisto y una olla de caldo.</p>
+        <div class="flow">POLLO → TUPPERS · PISTO → LUNES · CALDO → SOPA · CREMA · ARROZ</div>
+      </div>
+      <p style="max-width:670px;margin:auto;text-align:center;color:var(--muted)">Todo se apoya en una sola sesión del domingo. De ahí salen los tuppers de la semana y media cena de cada día. Si en la tuya se come, el pisto y el pollo dan de sobra para completar.</p>
+      <a class="back-to-top" href="#inicio"><span>↑</span> volver arriba</a>
+    </div>
+    <div class="aside">
+      <strong>La idea es simple:</strong> cocinar lo justo y necesario, y dejar que el domingo haga el trabajo pesado para que cada día solo haya que calentar y montar.
+    </div>
+
+    <div class="moment">
+      <p class="when">Por la mañana</p>
+      <h3>El pollo</h3>
+      <p>Despiezo el pollo entero y lo deshueso. La carne va a baja temperatura y después se sella en la sartén, que es lo que le da color y textura. Los huesos y la carcasa se quedan esperando a la noche.</p>
+      <p>De aquí salen los cinco tuppers de la semana. Si en tu casa hay más bocas que alimentar con él, cuenta con dos pollos: uno entero da entre kilo y kilo y medio de carne y se va rápido.</p>
+      <p class="mins">30 minutos de trabajo · cocción lenta</p>
+    </div>
+
+    <div class="moment">
+      <p class="when">A la vez</p>
+      <h3>El pisto</h3>
+      <p>Una sola olla, bien grande. Sirve para los tuppers y para la cena del lunes, y es de las pocas cosas que mejoran de un día para otro.</p>
+      <p class="mins">45 minutos · mejor al día siguiente</p>
+    </div>
+
+    <div class="moment">
+      <p class="when">Por la noche</p>
+      <h3>El caldo</h3>
+      <p>Los huesos y la carcasa a la crockpot con puerro, zanahoria, cebolla y laurel. Se hace solo mientras duermes y el lunes por la mañana está listo. Cuélalo y desgrásalo en frío.</p>
+      <p>Ese caldo sostiene la sopa del lunes, la crema del miércoles y el arroz del domingo.</p>
+      <p class="mins">Hora y media de cocción · trabajo mínimo</p>
+    </div>
+
+    <div class="moment">
+      <p class="when">Cada mañana</p>
+      <h3>Los tuppers</h3>
+      <p>Cinco, uno por día, y se montan en dos minutos cada mañana: pollo + pisto + una base.</p>
+      <p>La base la voy alternando: lunes y martes, arroz; miércoles, jueves y viernes, sémola. El arroz cocido no me gusta tenerlo más de dos días en la nevera; la sémola aguanta mejor la semana y se hidrata en cinco minutos.</p>
+    </div>
+
+    <div id="antes-semana" class="chapter" style="padding-top:52px">
+      <p class="eyebrow">06 · Antes de que empiece la semana</p>
+      <h2 class="chapter-title">Un rato ahora; menos lío después.</h2>
+      <p style="max-width:620px;color:var(--muted)">No hace falta hacerlo todo hoy. Marca lo que vas dejando listo y esta lista se queda guardada en este dispositivo.</p>
+      <div class="prep-list">
+        <label><input type="checkbox" data-prep="pollo"><span><strong>El pollo</strong> · despiezado, deshuesado y listo para cocinar a baja temperatura.</span></label>
+        <label><input type="checkbox" data-prep="pisto"><span><strong>El pisto</strong> · hecho en una sola olla y listo para los tuppers del lunes.</span></label>
+        <label><input type="checkbox" data-prep="caldo"><span><strong>El caldo</strong> · huesos, carcasa, puerro, zanahoria, cebolla y laurel.</span></label>
+        <label><input type="checkbox" data-prep="masa"><span><strong>La empanada</strong> · deja hecha la masa el jueves para que el viernes solo haya que cocinar.</span></label>
+        <label><input type="checkbox" data-prep="tuppers"><span><strong>Los tuppers</strong> · monta cinco cajas y no pienses en comer cada día.</span></label>
+      </div>
+      <a class="back-to-top" href="#inicio"><span>↑</span> volver arriba</a>
+    </div>
+  </section>
+
+  <section id="compra" class="panel">
+    <p class="eyebrow">07 · La compra</p>
+    <p style="margin:0 0 18px;color:var(--muted)">Para <span id="shopping-n">9</span> en casa · del 28 de septiembre al 4 de octubre. No tienes que comprarlo todo.</p>
+    <div class="counter">
+      <div class="bar"><i id="fill"></i></div>
+      <span id="count">0 / 0</span>
+    </div>
+
+    <div class="group">
+      <h3>Verdulería</h3>
+      <label class="item"><input type="checkbox" data-k="v1"><span>Calabacines <span class="qty">· <span data-q="8" data-u="u"></span></span></span></label>
+      <label class="item"><input type="checkbox" data-k="v2"><span>Berenjenas <span class="qty">· <span data-q="2" data-u="u"></span></span></span></label>
+      <label class="item"><input type="checkbox" data-k="v3"><span>Pimientos verdes <span class="qty">· <span data-q="5" data-u="u"></span></span> y rojos <span class="qty">· <span data-q="2" data-u="u"></span></span></span></label>
+      <label class="item"><input type="checkbox" data-k="v4"><span>Cebollas <span class="qty">· <span data-q="4" data-u="kg"></span></span></span></label>
+      <label class="item"><input type="checkbox" data-k="v5"><span>Puerros <span class="qty">· <span data-q="8" data-u="u"></span></span></span></label>
+      <label class="item"><input type="checkbox" data-k="v6"><span>Zanahorias <span class="qty">· <span data-q="1" data-u="kg"></span></span></span></label>
+      <label class="item"><input type="checkbox" data-k="v7"><span>Patatas <span class="qty">· <span data-q="4" data-u="kg"></span></span></span></label>
+      <label class="item"><input type="checkbox" data-k="v8"><span>Tomate maduro <span class="qty">· <span data-q="2.5" data-u="kg"></span></span></span></label>
+      <label class="item"><input type="checkbox" data-k="v9"><span>Lechuga <span class="qty">· <span data-q="2" data-u="u"></span></span></span></label>
+      <label class="item"><input type="checkbox" data-k="v10"><span>Ajos y perejil</span></label>
+    </div>
+
+    <div class="group">
+      <h3>Carnicería y pescadería</h3>
+      <label class="item"><input type="checkbox" data-k="c1"><span>Pollo entero <span class="qty">· <span data-q="1" data-u="u"></span></span></span></label>
+      <label class="item"><input type="checkbox" data-k="c2"><span>Filetes de lomo de cerdo <span class="qty">· <span data-q="12" data-u="u"></span></span></span></label>
+      <label class="item"><input type="checkbox" data-k="c3"><span>Salchichas <span class="qty">· <span data-q="18" data-u="u"></span></span></span></label>
+      <label class="item"><input type="checkbox" data-k="c4"><span>Hamburguesas <span class="qty">· <span data-q="14" data-u="u"></span></span></span></label>
+      <label class="item"><input type="checkbox" data-k="c5"><span>Costilla de cerdo troceada <span class="qty">· <span data-q="800" data-u="g"></span></span></span></label>
+      <label class="item"><input type="checkbox" data-k="c6"><span>Chorizo de guisar <span class="qty">· <span data-q="2" data-u="u"></span></span> y morcilla <span class="qty">· <span data-q="1" data-u="u"></span></span></span></label>
+      <label class="item"><input type="checkbox" data-k="c7"><span>Jamón cocido <span class="qty">· <span data-q="12" data-u="lonchas"></span></span></span></label>
+      <label class="item"><input type="checkbox" data-k="c8"><span>Lomos de bacalao congelados <span class="qty">· <span data-q="1.2" data-u="kg"></span></span></span></label>
+      <label class="item"><input type="checkbox" data-k="c9"><span>Berberechos <span class="qty">· <span data-q="400" data-u="g"></span></span></span></label>
+    </div>
+
+    <div class="group">
+      <h3>Despensa</h3>
+      <label class="item"><input type="checkbox" data-k="d1"><span>Lentejas <span class="qty">· <span data-q="1" data-u="kg"></span></span></span></label>
+      <label class="item"><input type="checkbox" data-k="d2"><span>Arroz redondo <span class="qty">· <span data-q="1.5" data-u="kg"></span></span></span></label>
+      <label class="item"><input type="checkbox" data-k="d3"><span>Sémola <span class="qty">· <span data-q="500" data-u="g"></span></span></span></label>
+      <label class="item"><input type="checkbox" data-k="d4"><span>Fideo fino <span class="qty">· <span data-q="300" data-u="g"></span></span></span></label>
+      <label class="item"><input type="checkbox" data-k="d5"><span>Patata paja <span class="qty">· <span data-q="1.5" data-u="kg"></span></span></span></label>
+      <label class="item"><input type="checkbox" data-k="d6"><span>Harina <span class="qty">· <span data-q="1" data-u="kg"></span></span></span></label>
+      <label class="item"><input type="checkbox" data-k="d7"><span>Pan de molde <span class="qty">· <span data-q="24" data-u="u"></span> rebanadas</span></span></label>
+      <label class="item"><input type="checkbox" data-k="d8"><span>Panes de hamburguesa <span class="qty">· <span data-q="14" data-u="u"></span></span></span></label>
+      <label class="item"><input type="checkbox" data-k="d9"><span>Tomate triturado <span class="qty">· <span data-q="3" data-u="u"></span> botes</span></span></label>
+      <label class="item"><input type="checkbox" data-k="d10"><span>Garbanzos cocidos <span class="qty">· <span data-q="400" data-u="g"></span></span></span></label>
+      <label class="item"><input type="checkbox" data-k="d11"><span>Vino blanco, aceite de oliva, laurel, pimentón, orégano, azafrán o colorante</span></label>
+    </div>
+
+    <div class="group">
+      <h3>Nevera</h3>
+      <label class="item"><input type="checkbox" data-k="n1"><span>Huevos <span class="qty">· <span data-q="40" data-u="u"></span></span></span></label>
+      <label class="item"><input type="checkbox" data-k="n2"><span>Leche <span class="qty">· <span data-q="1" data-u="L"></span></span></span></label>
+      <label class="item"><input type="checkbox" data-k="n3"><span>Mantequilla <span class="qty">· <span data-q="150" data-u="g"></span></span></span></label>
+      <label class="item"><input type="checkbox" data-k="n4"><span>Queso en lonchas <span class="qty">· <span data-q="12" data-u="u"></span></span> y queso rallado <span class="qty">· <span data-q="200" data-u="g"></span></span></span></label>
+      <label class="item"><input type="checkbox" data-k="n5"><span>Levadura fresca</span></label>
+    </div>
+
+    <div class="home-pantry">
+      <h3>Ya tengo</h3>
+      <ul><li>Pollo congelado</li><li>Crockpot para el caldo</li></ul>
+      <p style="font-size:12px;margin:10px 0 0;color:var(--muted)">Si no tienes olla lenta, el caldo sale igual en una olla normal en hora y media.</p>
+    </div>
+
+    <div class="acts">
+      <button class="solid" id="copy">Copiar la lista</button>
+      <button id="reset">Desmarcar todo</button>
+    </div>
+    <a class="back-to-top" href="#inicio"><span>↑</span> volver arriba</a>
+  </section>
+
+  <footer>
+    <p class="closing">Hasta la semana que viene.</p>
+    <p>Ya tienes el menú. Ya sabes qué comprar.<br>Y quizá ya tienes alguna cosa hecha.</p>
+    <p><strong>Ahora, a vivir la semana.</strong></p>
+    <p class="sig">Teresa</p>
+    <a class="back" href="/">← VOLVER A CASA NATURAL</a>
+    <p style="margin-top:24px;">CASA NATURAL · LAS CASAS TIENEN MEMORIA</p>
+    <p style="font:italic 16px 'Cormorant Garamond',Georgia,serif;letter-spacing:0">Nos vemos el domingo.</p>
+    <a class="back-to-top" href="#inicio"><span>↑</span> volver arriba</a>
+  </footer>
+</div>
+
+<script>
+(function(){
+  var BASE = 9, n = BASE, KEY_N = 'cn-menu-28sep-comensales', KEY_L = 'cn-menu-28sep-lista';
+
+  function fmt(base, unit, factor){
+    var v = base * factor;
+    switch(unit){
+      case 'kg':
+        if(v < 1) return Math.max(50, Math.round(v*1000/50)*50) + ' g';
+        return (Math.round(v*10)/10).toString().replace('.',',') + ' kg';
+      case 'g':
+        if(v >= 1000) return (Math.round(v/100)/10).toString().replace('.',',') + ' kg';
+        return Math.max(25, Math.round(v/25)*25) + ' g';
+      case 'L':
+        if(v < 1) return Math.max(100, Math.round(v*1000/100)*100) + ' ml';
+        return (Math.round(v*10)/10).toString().replace('.',',') + ' L';
+      case 'ml':
+        if(v >= 1000) return (Math.round(v/100)/10).toString().replace('.',',') + ' L';
+        return Math.max(50, Math.round(v/50)*50) + ' ml';
+      case 'u':
+        return Math.max(1, Math.round(v)).toString();
+      case 'lonchas':
+        return Math.max(1, Math.round(v)).toString();
+      default:
+        return Math.max(1, Math.round(v)).toString();
+    }
+  }
+
+  var qs = Array.prototype.slice.call(document.querySelectorAll('[data-q]'));
+  function scale(){
+    var f = n / BASE;
+    qs.forEach(function(el){ el.textContent = fmt(parseFloat(el.dataset.q), el.dataset.u, f); });
+    document.getElementById('n').textContent = n;
+    document.getElementById('shopping-n').textContent = n;
+    try{ localStorage.setItem(KEY_N, n); }catch(e){}
+  }
+
+  document.getElementById('minus').addEventListener('click', function(){ if(n>1){ n--; scale(); } });
+  document.getElementById('plus').addEventListener('click', function(){ if(n<30){ n++; scale(); } });
+  try{
+    var saved = parseInt(localStorage.getItem(KEY_N), 10);
+    if(saved > 0 && saved <= 30) n = saved;
+  }catch(e){}
+  scale();
+
+  document.querySelectorAll('.dish-head').forEach(function(h){
+    h.addEventListener('click', function(){
+      var d = h.closest('.dish'), b = d.querySelector('.dish-body'), open = !b.hidden;
+      b.hidden = open;
+      d.setAttribute('data-open', open ? '0' : '1');
+      h.setAttribute('aria-expanded', open ? 'false' : 'true');
+      h.querySelector('.plus').textContent = open ? 'VER RECETA' : 'CERRAR';
+    });
+    h.setAttribute('aria-expanded','false');
+    h.querySelector('.plus').textContent = 'VER RECETA';
+  });
+
+  var prepBoxes = Array.prototype.slice.call(document.querySelectorAll('[data-prep]'));
+  try {
+    var prepState = JSON.parse(localStorage.getItem('cn-menu-preparativos') || '{}');
+    prepBoxes.forEach(function(box){ box.checked = !!prepState[box.dataset.prep]; });
+  } catch(e) {}
+  prepBoxes.forEach(function(box){
+    box.addEventListener('change', function(){
+      try {
+        var state = {};
+        prepBoxes.forEach(function(item){ if(item.checked) state[item.dataset.prep] = true; });
+        localStorage.setItem('cn-menu-preparativos', JSON.stringify(state));
+      } catch(e) {}
+    });
+  });
+
+  var gzB = document.getElementById('gzBody'), gzT = document.getElementById('gzToggle');
+  if (gzT && gzB) {
+    gzT.addEventListener('click', function(){
+      var open = !gzB.hidden;
+      gzB.hidden = open;
+      gzT.textContent = open ? 'Ver cómo lo hago' : 'Ocultar';
+    });
+  }
+
+  var boxes = Array.prototype.slice.call(document.querySelectorAll('.item input'));
+  var fill = document.getElementById('fill'), count = document.getElementById('count');
+  function save(){
+    try{
+      var s = {};
+      boxes.forEach(function(b){ if(b.checked) s[b.dataset.k] = 1; });
+      localStorage.setItem(KEY_L, JSON.stringify(s));
+    }catch(e){}
+  }
+  function render(){
+    var d = boxes.filter(function(b){ return b.checked; }).length;
+    count.textContent = d + ' / ' + boxes.length;
+    fill.style.width = boxes.length ? (d/boxes.length*100) + '%' : '0%';
+  }
+  try{
+    var raw = localStorage.getItem(KEY_L);
+    if(raw){
+      var st = JSON.parse(raw) || {};
+      boxes.forEach(function(b){ b.checked = !!st[b.dataset.k]; });
+    }
+  }catch(e){}
+  boxes.forEach(function(b){ b.addEventListener('change', function(){ save(); render(); }); });
+  document.getElementById('reset').addEventListener('click', function(){
+    boxes.forEach(function(b){ b.checked = false; }); save(); render();
+  });
+  document.getElementById('copy').addEventListener('click', function(){
+    var out = ['LA COMPRA · para ' + n + ' en casa', '', 'YA TENGO', '- Pollo congelado', '- Crockpot para el caldo', ''];
+    document.querySelectorAll('#compra .group').forEach(function(g){
+      out.push(g.querySelector('h3').textContent.toUpperCase());
+      g.querySelectorAll('.item').forEach(function(it){
+        if(!it.querySelector('input').checked){
+          out.push('- ' + it.querySelector('span').textContent.replace(/\s+/g,' ').trim());
+        }
+      });
+      out.push('');
+    });
+    var btn = this;
+    function copied(){
+      btn.textContent = 'Copiada';
+      setTimeout(function(){ btn.textContent = 'Copiar la lista'; }, 1800);
+    }
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(out.join('\n')).then(copied).catch(function(){
+        btn.textContent = 'No se pudo copiar';
+        setTimeout(function(){ btn.textContent = 'Copiar la lista'; }, 1800);
+      });
+    } else {
+      btn.textContent = 'No se pudo copiar';
+      setTimeout(function(){ btn.textContent = 'Copiar la lista'; }, 1800);
+    }
+  });
+
+  render();
+})();
+</script>
+</body></html>
