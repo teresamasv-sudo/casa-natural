@@ -78,9 +78,9 @@
   }
   .tabs{display:flex;gap:26px;min-width:max-content;justify-content:center;}
   .tab{
-    font-family:inherit;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;
-    background:none;border:0;border-bottom:1px solid transparent;color:var(--muted);
-    padding:4px 0;cursor:pointer;white-space:nowrap;
+    font-family:inherit;font-size:14px;font-weight:700;letter-spacing:1px;text-transform:uppercase;
+    background:none;border:0;border-bottom:2px solid transparent;color:var(--ink);
+    padding:7px 0;cursor:pointer;white-space:nowrap;
   }
   .tab[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--ink);}
 
@@ -113,7 +113,7 @@
   .dish p.note{margin:0;font-size:13px;color:var(--muted);line-height:1.6;}
   .reuse{display:block;margin-top:6px;font-size:11px;color:var(--ink);opacity:.75;}
   .plus{flex:none;margin-left:auto;color:var(--muted);font-size:16px;padding-top:4px;display:inline-block;transition:transform .2s ease;}
-  .dish[data-open="1"] .plus{transform:rotate(45deg);}
+  .dish[data-open="1"] .plus{transform:none;}
 
   .dish-body{padding:2px 0 20px 70px;}
   @media (max-width:520px){ .dish-body{padding-left:0;} }
@@ -129,14 +129,6 @@
   .moment p{margin:0 0 10px;font-size:14px;line-height:1.7;}
   .moment p:last-child{margin-bottom:0;}
   .moment .mins{color:var(--muted);font-size:12px;}
-  .recipe-note{margin:14px 0;border-top:1px solid var(--line);}
-  .recipe-note summary{padding:12px 0;cursor:pointer;list-style:none;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;}
-  .recipe-note summary::-webkit-details-marker{display:none;}
-  .recipe-note summary::after{content:"＋";float:right;color:var(--muted);}
-  .recipe-note[open] summary::after{content:"−";}
-  .recipe-note .recipe-copy{padding:0 0 10px;}
-  .recipe-note p,.recipe-note li{font-size:14px;line-height:1.7;}
-  .recipe-note ol{padding-left:20px;margin:8px 0 12px;}
   .special-recipe{max-width:680px;margin:28px auto 0;padding:24px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);}
   .special-recipe h3{font-family:"Cormorant Garamond",Georgia,serif;font-size:25px;line-height:1.15;margin:0 0 12px;}
   .special-recipe p,.special-recipe li{font-size:14px;line-height:1.75;}
@@ -197,7 +189,7 @@
   }
   body{background:var(--bg);font-size:16px;line-height:1.72;}
   .sheet{max-width:none;background:var(--paper);border:0;overflow:hidden;}
-  .hero{height:min(92svh,880px);min-height:620px;position:relative;background:#4d4031 url('/hero-semana-resuelta.png') center 48%/cover no-repeat;display:grid;place-items:center;color:#fffaf0;text-align:center;isolation:isolate;}
+  .hero{height:min(92svh,880px);min-height:620px;position:relative;background:#4d4031 url('hero-semana-resuelta.png') center 48%/cover no-repeat;display:grid;place-items:center;color:#fffaf0;text-align:center;isolation:isolate;}
   .hero:before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(22,18,13,.46),rgba(22,18,13,.16) 38%,rgba(22,18,13,.02) 62%,rgba(22,18,13,.32));z-index:-1;}
   .hero-copy{position:absolute;top:clamp(38px,9vh,110px);left:50%;transform:translateX(-50%);width:min(92%,760px);padding:26px 22px;margin:0;text-shadow:0 2px 28px #30271f99;}
   .hero h1{font-size:clamp(54px,10vw,112px);letter-spacing:.015em;line-height:.88;margin:0 0 22px;}
@@ -218,7 +210,7 @@
   .stepper{gap:24px}.stepper button{border-radius:50%;width:44px;height:44px;background:transparent;border-color:var(--line-strong);font-size:22px;}
   .stepper .num{font-size:54px;min-width:64px}.servings p.hint{font-size:12px;}
   nav{position:sticky;top:0;margin:0;z-index:10;background:#f8ecd7ed;backdrop-filter:blur(10px);padding:9px 16px;border-color:var(--line);}
-  .tabs{gap:clamp(18px,4vw,42px)}.tab{font-size:10px;letter-spacing:1px;text-decoration:none;}
+  .tabs{gap:clamp(18px,4vw,42px)}.tab{font-size:13px;letter-spacing:.8px;text-decoration:none;}
   .tab:hover,.tab:focus-visible{color:var(--tomato);}
   .panel{max-width:1020px;margin:auto;padding:clamp(42px,7vw,80px) clamp(22px,6vw,72px);}
   #menu>.aside{border:0;border-left:2px solid var(--terracotta);background:transparent;padding:3px 0 3px 20px;margin:0 auto 42px;max-width:690px;font:italic 20px/1.6 "Cormorant Garamond",Georgia,serif;}
@@ -229,7 +221,7 @@
   .dish h3{font-size:clamp(21px,3vw,26px);font-weight:500;}
   .dish-body{font-size:15px}.dish-body li{font-size:15px;}
   .plus{font-size:9px;letter-spacing:1px;text-transform:uppercase;border-bottom:1px solid var(--line-strong);padding:5px 0;white-space:nowrap;}
-  .dish[data-open="1"] .plus{transform:none}.dish[data-open="1"] .plus:after{content:" âˆ’"}
+  .dish[data-open="1"] .plus{transform:none}
   .moment{border-color:var(--line);padding:19px 0}.moment h3{font-size:27px;font-weight:500;}
   #batch{max-width:none;background:#e8dfd0;}
   #batch .chapter{padding-top:0;padding-bottom:40px;}
@@ -267,7 +259,7 @@
   footer p{font-size:10px;letter-spacing:1.2px;}footer .sig{font-size:22px;}
   footer .closing{font:italic clamp(26px,5vw,42px)/1.15 "Cormorant Garamond",Georgia,serif;color:var(--ink);letter-spacing:0;margin:0 0 20px;}
   footer .back{display:inline-block;margin-top:25px;color:var(--ink);font-size:10px;letter-spacing:1.5px;text-decoration:none;border-bottom:1px solid var(--line-strong);padding-bottom:5px;}
-  @media(max-width:600px){.hero{height:92svh;min-height:600px;background-position:57% center}.hero-copy{top:42px;width:96%;padding:22px 14px}.hero h1{font-size:clamp(52px,15vw,78px)}.hero .dek{max-width:290px;margin-inline:auto}.tabs{justify-content:flex-start}.tab{font-size:9px}.chapter{padding-inline:23px}.panel{padding-inline:22px}.slot{width:53px}.dish-body{padding-left:0}.acts button{flex:1;padding:13px 10px}.flow-note{margin-inline:-5px}}
+  @media(max-width:600px){.hero{height:92svh;min-height:600px;background-position:57% center}.hero-copy{top:42px;width:96%;padding:22px 14px}.hero h1{font-size:clamp(52px,15vw,78px)}.hero .dek{max-width:290px;margin-inline:auto}nav{padding:11px 16px}.tabs{justify-content:flex-start;gap:20px}.tab{font-size:13px;letter-spacing:.5px}.chapter{padding-inline:23px}.panel{padding-inline:22px}.slot{width:53px}.dish-body{padding-left:0}.acts button{flex:1;padding:13px 10px}.flow-note{margin-inline:-5px}}
 </style>
 </head>
 <body>
@@ -323,20 +315,19 @@
       <p class="tagline">La sesión del domingo</p>
       <h3>Pollo, pisto y caldo</h3>
       <p>Todo se apoya en una sola sesión del domingo. El pollo va a baja temperatura y en la sartén para que quede bien. El pisto y el caldo se hacen a la vez y son la base de la semana.</p>
-      <button class="toggle" id="gzToggle">Ver cómo lo hago</button>
+      <button class="toggle" id="gzToggle">Ver receta y pasos del domingo</button>
       <div class="body" id="gzBody" hidden>
         <h4 style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin:0 0 8px;font-weight:400;">La idea</h4>
-        <ul style="margin:0 0 14px;padding-left:16px;font-size:14px;">
-          <li>Las pechugas van en bolsa apta para cocción: 65 °C durante 90 minutos; después las sello en la sartén.</li>
-          <li>Una olla grande de pisto para los tuppers y para el lunes.</li>
-          <li>Los huesos y la carcasa a la crockpot con puerro, zanahoria, cebolla y laurel.</li>
-        </ul>
-        <h4 style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin:0 0 8px;font-weight:400;">Cómo va</h4>
+        <p style="margin:0 0 14px;font-size:14px;line-height:1.7;">Despiezo el pollo y separo las pechugas para cocinarlas en bolsa. Los huesos y la carcasa se quedan para el caldo de la noche.</p>
+        <h4 style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin:0 0 8px;font-weight:400;">Pechugas · 2–3 raciones</h4>
+        <p style="margin:0 0 10px;font-size:14px;line-height:1.7;"><strong>Ingredientes:</strong> 2 pechugas de pollo, 30 g de AOVE, sal y pimienta al gusto, un poco de ajo seco en polvo, tomillo u otras hierbas y un chorrito de limón.</p>
         <ol style="margin:0;padding-left:18px;font-size:14px;">
-          <li>El pollo se deshuesa y se sella en la sartén para que tenga color y textura.</li>
-          <li>El pisto se hace en una olla grande y se deja reposar para que gane sabor.</li>
-          <li>El caldo cuela y desgrasa en frío y luego sostiene la sopa, la crema y el arroz.</li>
+          <li>Si estaban congeladas, descongélalas en la nevera. Pon las pechugas en una bolsa zip apta para cocción, con el aceite, la sal, la pimienta, el ajo, las hierbas y el limón. Cierra bien la bolsa y deja las pechugas en una sola capa.</li>
+          <li>Pon 1 litro de agua en el vaso de la Thermomix, mete la bolsa y programa 65 °C durante 90 minutos.</li>
+          <li>Al terminar, sella las pechugas en una sartén bien caliente. Déjalas enfriar, lamínalas y guárdalas tapadas en la nevera antes de que pasen dos horas. Congela las porciones para el final de la semana y descongélalas en la nevera.</li>
         </ol>
+        <h4 style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin:16px 0 8px;font-weight:400;">Y a la vez</h4>
+        <p style="margin:0;font-size:14px;line-height:1.7;">Haz una olla grande de pisto para los tuppers y el lunes. Guarda los huesos y la carcasa para el caldo con puerro, zanahoria, cebolla y laurel.</p>
       </div>
     </div>
 
@@ -478,8 +469,8 @@
         <div class="dish-body" hidden>
           <h4>Para la empanada</h4>
           <ul>
-            <li>Masa: 500 g de harina, 200 g de agua, 100 g de AOVE, 10 g de sal, 5 g de levadura seca de panadero (o 15 g de fresca) y 1 cucharadita de pimentón dulce</li>
-            <li>Relleno: <span data-q="2" data-u="u"></span> cebollas, <span data-q="1" data-u="u"></span> pimiento rojo, <span data-q="1" data-u="u"></span> pimiento verde, <span data-q="400" data-u="g"></span> de berberechos, tomate triturado, pimentón y huevo para pintar</li>
+            <li>Masa: 500 g de harina, 200 g de agua, 100 g de AOVE, 10 g de sal, 5 g de levadura seca (o 15 g de fresca) y 1 cucharadita de pimentón dulce</li>
+            <li>Relleno: 3 latas de berberechos, 3 cebollas grandes, 1 pimiento rojo, 1 pimiento verde italiano, 2 dientes de ajo, 80–100 g de AOVE, laurel, pimentón dulce y picante, 50–70 g del líquido de las latas, 50 g de vino blanco (opcional), pimienta negra y muy poca sal si hace falta</li>
           </ul>
           <h4>Para los croques</h4>
           <ul>
@@ -490,7 +481,7 @@
           </ul>
           <h4>Cómo va</h4>
           <ol>
-            <li>La receta completa de la empanada —con la masa de la de pollo— está en <a href="#receta">la receta especial de esta semana</a>.</li>
+            <li>El paso a paso completo de la masa y el relleno está en <a href="#receta">la receta especial de esta semana</a>.</li>
             <li>Los croques: bechamel entre las dos rebanadas, jamón, queso, más bechamel por encima y queso rallado. Al horno hasta que gratinen.</li>
           </ol>
         </div>
@@ -617,17 +608,7 @@
       <h3>El pollo</h3>
       <p>Despiezo el pollo entero y lo deshueso. Las pechugas van a baja temperatura y después las sello en la sartén, que es lo que les da color y textura. Los huesos y la carcasa se quedan esperando a la noche.</p>
       <p>De aquí salen los cinco tuppers de la semana. Si en tu casa hay más bocas que alimentar con él, cuenta con dos pollos: uno entero da entre kilo y kilo y medio de carne y se va rápido.</p>
-      <details class="recipe-note">
-        <summary>Mi receta de pechugas · 2–3 raciones</summary>
-        <div class="recipe-copy">
-          <p><strong>Ingredientes:</strong> 2 pechugas de pollo, 30 g de AOVE, sal y pimienta al gusto, un poco de ajo seco en polvo, tomillo u otras hierbas y un chorrito de limón.</p>
-          <ol>
-            <li>Si estaban congeladas, descongélalas en la nevera. Pon las pechugas con el aceite, la sal, la pimienta, el ajo, las hierbas y el limón en una bolsa apta para cocción a 65 °C. Ciérrala bien y deja el pollo en una sola capa.</li>
-            <li>Pon 1 litro de agua en el vaso de la Thermomix, introduce la bolsa y programa 65 °C durante 90 minutos, contando desde que el agua alcanza esa temperatura.</li>
-            <li>Sella las pechugas en una sartén bien caliente. Déjalas enfriar, lamínalas y guárdalas tapadas en la nevera, a 4 °C o menos, antes de que pasen dos horas. Congela las porciones que vayas a usar al final de la semana y descongélalas en la nevera.</li>
-          </ol>
-        </div>
-      </details>
+      <p><a href="#menu">La receta completa de las pechugas está en 04 · La semana, dentro de la sesión del domingo; abre «Ver receta y pasos del domingo».</a></p>
       <p class="mins">30 minutos de trabajo · cocción lenta</p>
     </div>
 
@@ -700,7 +681,7 @@
       <label class="item"><input type="checkbox" data-k="c6"><span>Chorizo de guisar <span class="qty">· <span data-q="2" data-u="u"></span></span> y morcilla <span class="qty">· <span data-q="1" data-u="u"></span></span></span></label>
       <label class="item"><input type="checkbox" data-k="c7"><span>Jamón cocido <span class="qty">· <span data-q="12" data-u="u"></span> lonchas</span></span></label>
       <label class="item"><input type="checkbox" data-k="c8"><span>Lomos de bacalao congelados <span class="qty">· <span data-q="1.2" data-u="kg"></span></span></span></label>
-      <label class="item"><input type="checkbox" data-k="c9"><span>Berberechos <span class="qty">· <span data-q="400" data-u="g"></span></span></span></label>
+      <label class="item"><input type="checkbox" data-k="c9"><span>Berberechos de buena calidad · 3 latas</span></label>
     </div>
 
     <div class="group">
@@ -743,9 +724,9 @@
   <section id="receta" class="panel">
     <p class="eyebrow">08 · Una receta para esta semana</p>
     <h2 class="chapter-title" style="text-align:center;margin-bottom:8px">Empanada de berberechos</h2>
-    <p style="text-align:center;color:var(--muted);margin:0 auto;max-width:580px">Cebolla pochada, berberechos y la masa de la empanada de pollo que estaba de muerte.</p>
+    <p style="text-align:center;color:var(--muted);margin:0 auto;max-width:580px">Sofrito lento y concentrado, berberechos tiernos y esa masa de la empanada de pollo que estaba de muerte.</p>
     <div class="special-recipe">
-      <h3>La masa que nos encantó</h3>
+      <h3>La masa</h3>
       <p>500 g de harina de trigo, 200 g de agua, 100 g de aceite de oliva virgen extra, 10 g de sal, 5 g de levadura seca de panadero (o 15 g de fresca) y 1 cucharadita de pimentón dulce.</p>
       <ol>
         <li>Pon en el vaso el agua, el aceite y la levadura. Programa 2 min / 37 °C / vel 2.</li>
@@ -753,13 +734,20 @@
         <li>Saca la masa, forma una bola y déjala reposar tapada entre 30 y 45 minutos.</li>
       </ol>
       <h3>El relleno de berberechos</h3>
-      <p>2 cebollas grandes, 1 pimiento rojo, 1 pimiento verde, 400 g de berberechos, tomate triturado, pimentón, aceite de oliva y huevo batido para pintar.</p>
+      <p>3 latas de berberechos de buena calidad, 3 cebollas grandes, 1 pimiento rojo, 1 pimiento verde italiano, 2 dientes de ajo, 80–100 g de AOVE, 1 hoja de laurel, 1 cucharadita de pimentón dulce, una puntita de pimentón picante, 50–70 g del líquido de los berberechos, 50 g de vino blanco (opcional), pimienta negra y muy poca sal solo si hace falta al final.</p>
       <ol>
-        <li>Pocha despacito la cebolla y los pimientos. Añade el tomate triturado y el pimentón fuera del fuego; incorpora al final los berberechos escurridos. Deja enfriar completamente el relleno.</li>
-        <li>Divide la masa en dos partes, una un poco más grande. Estira la base fina y colócala en la bandeja. Reparte el relleno frío dejando un margen, cubre con la otra parte y cierra bien los bordes.</li>
-        <li>Haz un agujerito en el centro para que salga el vapor, pinta con huevo batido y hornea a 200 °C, con calor arriba y abajo, unos 30 minutos, hasta que esté bien dorada.</li>
+        <li>Escurre los berberechos y reserva su líquido. Guarda algunos enteros para ponerlos al final sobre el relleno.</li>
+        <li>Pon en el vaso las cebollas en cuartos, el pimiento rojo, el pimiento verde y los ajos. Trocea 5 seg / vel 5 y baja los restos de las paredes con la espátula.</li>
+        <li>Añade el AOVE y el laurel. Sofríe 25 min / 120 °C / giro inverso / vel cuchara. Si queda demasiado húmedo, quita el cubilete durante los últimos 5 minutos.</li>
+        <li>Añade el pimentón dulce y el picante. Cocina 10 seg / 100 °C / giro inverso / vel cuchara.</li>
+        <li>Incorpora el vino blanco y cocina 5 min / 120 °C / giro inverso / vel cuchara, sin cubilete.</li>
+        <li>Añade 50 g del líquido reservado y cocina 5 min / Varoma / giro inverso / vel cuchara, sin cubilete. El sofrito debe quedar meloso y concentrado, no líquido.</li>
+        <li>Deja templar unos minutos. Añade los berberechos y mezcla 10 seg / giro inverso / vel cuchara, sin triturarlos. Reserva los enteros para repartirlos a mano por encima.</li>
+        <li>Divide la masa aproximadamente en un 60 % para la base y un 40 % para la tapa. Estira la base muy fina y colócala sobre una bandeja con papel de horno. Reparte el relleno dejando 2 cm libres y coloca encima los berberechos enteros.</li>
+        <li>Estira la tapa, cubre la empanada y cierra los bordes con un buen repulgue. Haz un pequeño agujero en el centro para que salga el vapor y pincela con un poco de AOVE.</li>
+        <li>Con el horno precalentado a 210 °C, calor arriba y abajo, hornea 30–35 minutos, hasta que esté bien dorada. Déjala reposar 10–15 minutos antes de cortarla.</li>
       </ol>
-      <p class="mins">La de berberechos · con la masa inolvidable de la de pollo</p>
+      <p class="mins">El truco: no cocines demasiado los berberechos; el sabor del mar tiene que seguir reconociéndose. Al salir del horno, un hilito finísimo de AOVE bueno, si te apetece.</p>
     </div>
     <a class="back-to-top" href="#inicio"><span>↑</span> volver arriba</a>
   </section>
@@ -853,7 +841,7 @@
     gzT.addEventListener('click', function(){
       var open = !gzB.hidden;
       gzB.hidden = open;
-      gzT.textContent = open ? 'Ver cómo lo hago' : 'Ocultar';
+      gzT.textContent = open ? 'Ver receta y pasos del domingo' : 'Ocultar';
     });
   }
 
