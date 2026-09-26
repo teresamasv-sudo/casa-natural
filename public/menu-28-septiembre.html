@@ -129,6 +129,18 @@
   .moment p{margin:0 0 10px;font-size:14px;line-height:1.7;}
   .moment p:last-child{margin-bottom:0;}
   .moment .mins{color:var(--muted);font-size:12px;}
+  .recipe-note{margin:14px 0;border-top:1px solid var(--line);}
+  .recipe-note summary{padding:12px 0;cursor:pointer;list-style:none;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;}
+  .recipe-note summary::-webkit-details-marker{display:none;}
+  .recipe-note summary::after{content:"＋";float:right;color:var(--muted);}
+  .recipe-note[open] summary::after{content:"−";}
+  .recipe-note .recipe-copy{padding:0 0 10px;}
+  .recipe-note p,.recipe-note li{font-size:14px;line-height:1.7;}
+  .recipe-note ol{padding-left:20px;margin:8px 0 12px;}
+  .special-recipe{max-width:680px;margin:28px auto 0;padding:24px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);}
+  .special-recipe h3{font-family:"Cormorant Garamond",Georgia,serif;font-size:25px;line-height:1.15;margin:0 0 12px;}
+  .special-recipe p,.special-recipe li{font-size:14px;line-height:1.75;}
+  .special-recipe ol{padding-left:20px;margin:12px 0;}
 
   .counter{display:flex;align-items:center;gap:14px;padding:14px 0 18px;border-bottom:1px solid var(--line);margin-bottom:22px;}
   .bar{flex:1;height:6px;background:var(--bg);border:1px solid var(--line);}
@@ -298,6 +310,7 @@
       <a class="tab" href="#menu">La semana</a>
       <a class="tab" href="#jugada">Cómo me organizo</a>
       <a class="tab" href="#compra">La compra</a>
+      <a class="tab" href="#receta">La receta</a>
     </div>
   </nav>
 
@@ -314,7 +327,7 @@
       <div class="body" id="gzBody" hidden>
         <h4 style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin:0 0 8px;font-weight:400;">La idea</h4>
         <ul style="margin:0 0 14px;padding-left:16px;font-size:14px;">
-          <li>Deshueso el pollo y lo dejo a baja temperatura.</li>
+          <li>Las pechugas van en bolsa apta para cocción: 65 °C durante 90 minutos; después las sello en la sartén.</li>
           <li>Una olla grande de pisto para los tuppers y para el lunes.</li>
           <li>Los huesos y la carcasa a la crockpot con puerro, zanahoria, cebolla y laurel.</li>
         </ul>
@@ -457,7 +470,7 @@
           <span class="slot">Cena</span>
           <span>
             <h3>Empanada de berberechos y croque monsieur</h3>
-            <p class="note">Noche de picoteo. La empanada para los mayores, los croques para los niños.</p>
+            <p class="note">Noche de picoteo. La empanada para los mayores, los croques para los niños. Esta semana, berberechos con la masa de la empanada de pollo.</p>
             <span class="reuse">↻ El jueves deja hecha la empanada</span>
           </span>
           <span class="plus">+</span>
@@ -465,8 +478,8 @@
         <div class="dish-body" hidden>
           <h4>Para la empanada</h4>
           <ul>
-            <li>Masa: <span data-q="500" data-u="g"></span> de harina, <span data-q="100" data-u="ml"></span> de aceite, <span data-q="100" data-u="ml"></span> de vino blanco, <span data-q="100" data-u="ml"></span> de agua templada, <span data-q="20" data-u="g"></span> de levadura fresca y sal</li>
-            <li>Relleno: <span data-q="2" data-u="u"></span> cebollas, <span data-q="1" data-u="u"></span> pimiento, <span data-q="400" data-u="g"></span> de berberechos, tomate triturado y pimentón</li>
+            <li>Masa: 500 g de harina, 200 g de agua, 100 g de AOVE, 10 g de sal, 5 g de levadura seca de panadero (o 15 g de fresca) y 1 cucharadita de pimentón dulce</li>
+            <li>Relleno: <span data-q="2" data-u="u"></span> cebollas, <span data-q="1" data-u="u"></span> pimiento rojo, <span data-q="1" data-u="u"></span> pimiento verde, <span data-q="400" data-u="g"></span> de berberechos, tomate triturado, pimentón y huevo para pintar</li>
           </ul>
           <h4>Para los croques</h4>
           <ul>
@@ -477,9 +490,7 @@
           </ul>
           <h4>Cómo va</h4>
           <ol>
-            <li>La masa en la Thermomix son dos minutos. Deja que repose mientras haces el sofrito.</li>
-            <li>Pochan cebolla y pimiento muy despacio, añades el tomate y el pimentón fuera del fuego, y por último los berberechos escurridos.</li>
-            <li>Monta la empanada, píntala con huevo y hornea a 190 °C, cuarenta minutos.</li>
+            <li>La receta completa de la empanada —con la masa de la de pollo— está en <a href="#receta">la receta especial de esta semana</a>.</li>
             <li>Los croques: bechamel entre las dos rebanadas, jamón, queso, más bechamel por encima y queso rallado. Al horno hasta que gratinen.</li>
           </ol>
         </div>
@@ -604,8 +615,19 @@
     <div class="moment">
       <p class="when">Por la mañana</p>
       <h3>El pollo</h3>
-      <p>Despiezo el pollo entero y lo deshueso. La carne va a baja temperatura y después se sella en la sartén, que es lo que le da color y textura. Los huesos y la carcasa se quedan esperando a la noche.</p>
+      <p>Despiezo el pollo entero y lo deshueso. Las pechugas van a baja temperatura y después las sello en la sartén, que es lo que les da color y textura. Los huesos y la carcasa se quedan esperando a la noche.</p>
       <p>De aquí salen los cinco tuppers de la semana. Si en tu casa hay más bocas que alimentar con él, cuenta con dos pollos: uno entero da entre kilo y kilo y medio de carne y se va rápido.</p>
+      <details class="recipe-note">
+        <summary>Mi receta de pechugas · 2–3 raciones</summary>
+        <div class="recipe-copy">
+          <p><strong>Ingredientes:</strong> 2 pechugas de pollo, 30 g de AOVE, sal y pimienta al gusto, un poco de ajo seco en polvo, tomillo u otras hierbas y un chorrito de limón.</p>
+          <ol>
+            <li>Si estaban congeladas, descongélalas en la nevera. Pon las pechugas con el aceite, la sal, la pimienta, el ajo, las hierbas y el limón en una bolsa apta para cocción a 65 °C. Ciérrala bien y deja el pollo en una sola capa.</li>
+            <li>Pon 1 litro de agua en el vaso de la Thermomix, introduce la bolsa y programa 65 °C durante 90 minutos, contando desde que el agua alcanza esa temperatura.</li>
+            <li>Sella las pechugas en una sartén bien caliente. Déjalas enfriar, lamínalas y guárdalas tapadas en la nevera, a 4 °C o menos, antes de que pasen dos horas. Congela las porciones que vayas a usar al final de la semana y descongélalas en la nevera.</li>
+          </ol>
+        </div>
+      </details>
       <p class="mins">30 minutos de trabajo · cocción lenta</p>
     </div>
 
@@ -628,7 +650,7 @@
       <p class="when">Cada mañana</p>
       <h3>Los tuppers</h3>
       <p>Cinco, uno por día, y se montan en dos minutos cada mañana: pollo + pisto + una base.</p>
-      <p>La base la voy alternando: lunes y martes, arroz; miércoles, jueves y viernes, sémola. El arroz cocido no me gusta tenerlo más de dos días en la nevera; la sémola aguanta mejor la semana y se hidrata en cinco minutos.</p>
+      <p>La base la voy alternando: lunes y martes, arroz; miércoles, jueves y viernes, sémola. El domingo por la noche extiendo el arroz recién hecho en una bandeja o recipiente poco profundo para que se enfríe rápido. En cuanto se haya atemperado, lo guardo tapado en la nevera, a 4 °C o menos; no lo dejo más de dos horas a temperatura ambiente y lo uso en los dos días siguientes. La sémola aguanta mejor la semana y se hidrata en cinco minutos.</p>
     </div>
 
     <div id="antes-semana" class="chapter" style="padding-top:52px">
@@ -702,18 +724,42 @@
       <label class="item"><input type="checkbox" data-k="n2"><span>Leche <span class="qty">· <span data-q="1" data-u="L"></span></span></span></label>
       <label class="item"><input type="checkbox" data-k="n3"><span>Mantequilla <span class="qty">· <span data-q="150" data-u="g"></span></span></span></label>
       <label class="item"><input type="checkbox" data-k="n4"><span>Queso en lonchas <span class="qty">· <span data-q="12" data-u="u"></span></span> y queso rallado <span class="qty">· <span data-q="200" data-u="g"></span></span></span></label>
-      <label class="item"><input type="checkbox" data-k="n5"><span>Levadura fresca</span></label>
+      <label class="item"><input type="checkbox" data-k="n5"><span>Levadura de panadero seca o fresca (para la masa de empanada)</span></label>
     </div>
 
     <div class="home-pantry">
-      <h3>Ya tengo</h3>
-      <ul><li>Pollo congelado</li><li>Crockpot para el caldo</li></ul>
-      <p style="font-size:12px;margin:10px 0 0;color:var(--muted)">Si no tienes olla lenta, el caldo sale igual en una olla normal en hora y media.</p>
+      <h3>En casa de Teresa</h3>
+      <ul><li>Yo ya tenía un pollo congelado y una crockpot para el caldo.</li></ul>
+      <p style="font-size:12px;margin:10px 0 0;color:var(--muted)">El pollo entero está incluido en la compra; si ya tienes uno, puedes marcarlo como listo. Si no tienes olla lenta, el caldo sale igual en una olla normal en hora y media.</p>
     </div>
 
     <div class="acts">
       <button class="solid" id="copy">Copiar la lista</button>
       <button id="reset">Desmarcar todo</button>
+    </div>
+    <a class="back-to-top" href="#inicio"><span>↑</span> volver arriba</a>
+  </section>
+
+  <section id="receta" class="panel">
+    <p class="eyebrow">08 · Una receta para esta semana</p>
+    <h2 class="chapter-title" style="text-align:center;margin-bottom:8px">Empanada de berberechos</h2>
+    <p style="text-align:center;color:var(--muted);margin:0 auto;max-width:580px">Cebolla pochada, berberechos y la masa de la empanada de pollo que estaba de muerte.</p>
+    <div class="special-recipe">
+      <h3>La masa que nos encantó</h3>
+      <p>500 g de harina de trigo, 200 g de agua, 100 g de aceite de oliva virgen extra, 10 g de sal, 5 g de levadura seca de panadero (o 15 g de fresca) y 1 cucharadita de pimentón dulce.</p>
+      <ol>
+        <li>Pon en el vaso el agua, el aceite y la levadura. Programa 2 min / 37 °C / vel 2.</li>
+        <li>Añade la harina, la sal y el pimentón. Mezcla 15 seg / vel 6 y amasa 3 min / función espiga.</li>
+        <li>Saca la masa, forma una bola y déjala reposar tapada entre 30 y 45 minutos.</li>
+      </ol>
+      <h3>El relleno de berberechos</h3>
+      <p>2 cebollas grandes, 1 pimiento rojo, 1 pimiento verde, 400 g de berberechos, tomate triturado, pimentón, aceite de oliva y huevo batido para pintar.</p>
+      <ol>
+        <li>Pocha despacito la cebolla y los pimientos. Añade el tomate triturado y el pimentón fuera del fuego; incorpora al final los berberechos escurridos. Deja enfriar completamente el relleno.</li>
+        <li>Divide la masa en dos partes, una un poco más grande. Estira la base fina y colócala en la bandeja. Reparte el relleno frío dejando un margen, cubre con la otra parte y cierra bien los bordes.</li>
+        <li>Haz un agujerito en el centro para que salga el vapor, pinta con huevo batido y hornea a 200 °C, con calor arriba y abajo, unos 30 minutos, hasta que esté bien dorada.</li>
+      </ol>
+      <p class="mins">La de berberechos · con la masa inolvidable de la de pollo</p>
     </div>
     <a class="back-to-top" href="#inicio"><span>↑</span> volver arriba</a>
   </section>
@@ -837,7 +883,7 @@
     boxes.forEach(function(b){ b.checked = false; }); save(); render();
   });
   document.getElementById('copy').addEventListener('click', function(){
-    var out = ['LA COMPRA · para ' + n + ' en casa', '', 'YA TENGO', '- Pollo congelado', '- Crockpot para el caldo', ''];
+    var out = ['LA COMPRA · para ' + n + ' en casa', '', 'EN CASA DE TERESA', '- Ya tenía un pollo congelado y una crockpot para el caldo', ''];
     document.querySelectorAll('#compra .group').forEach(function(g){
       out.push(g.querySelector('h3').textContent.toUpperCase());
       g.querySelectorAll('.item').forEach(function(it){
