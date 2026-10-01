@@ -139,7 +139,7 @@
   <div class="thanks" id="gracias" hidden>
     <h2>Gracias de corazón.</h2>
     <p>Voy a leer cada respuesta con calma. Lo que me cuentes irá cambiando los próximos menús.</p>
-    <p>Nos vemos el domingo con el próximo menú.</p>
+    <p hidden><a id="menuLink" href="/">Ver el menú de esta semana</a></p>
   </div>
 
   <footer>
@@ -193,6 +193,27 @@
       status.textContent = 'No se ha podido enviar. Vuelve a intentarlo en un momento.';
     });
   });
+
+  // Enlace al menú de la semana en curso (semana de lunes a domingo).
+  // Busca menu-<día>-<mes>.html empezando por el lunes de esta semana y, si aún no existe, prueba semanas anteriores.
+  (function(){
+    var link = document.getElementById('menuLink');
+    if (!link) return;
+    var MESES = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+    var hoy = new Date();
+    var lunes = new Date(hoy.getFullYear(), hoy.getMonth(), hoy.getDate() - ((hoy.getDay() + 6) % 7));
+    function url(d){ return '/menu-' + d.getDate() + '-' + MESES[d.getMonth()] + '.html'; }
+    function intenta(n){
+      if (n > 4) return;
+      var d = new Date(lunes.getFullYear(), lunes.getMonth(), lunes.getDate() - 7*n);
+      var u = url(d);
+      fetch(u, { method: 'HEAD' }).then(function(r){
+        if (r.ok){ link.href = u; link.parentNode.hidden = false; }
+        else { intenta(n + 1); }
+      }).catch(function(){});
+    }
+    intenta(0);
+  })();
 })();
 </script>
 </body>
